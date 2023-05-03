@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zoominghome/aboutus.dart';
+import 'package:zoominghome/contactus.dart';
 import 'package:zoominghome/signin.dart';
 
 import 'help.dart';
@@ -183,6 +185,24 @@ Widget navBar(context,key){
                 },
               ),
               SizedBox(
+                height: Dim().d4,
+              ),
+              ListTile(
+                leading: SvgPicture.asset('assets/aboutus.svg',width: 16,height: 18,),
+                title: Text(
+                  'About Us',
+                  style: TextStyle(
+                      color: Clr().primaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                minLeadingWidth : 10,
+                onTap: () {
+                  STM().redirect2page(context, aboutus());
+                  close(key);
+                },
+              ),
+              SizedBox(
                 height: 4,
               ),
               ListTile(
@@ -196,7 +216,7 @@ Widget navBar(context,key){
                 ),
                 minLeadingWidth : 10,
                 onTap: () {
-                  // STM().redirect2page(context, Contact());
+                  STM().redirect2page(context, contactus());
                   close(key);
                 },
               ),

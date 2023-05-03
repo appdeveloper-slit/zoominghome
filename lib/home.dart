@@ -3,6 +3,7 @@ import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoominghome/sidedrawer.dart';
 import 'package:zoominghome/values/strings.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController nameCtrl = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-  String? cityCat, Token;
+  String? cityCat, Token,sUUID;
   int? cityId;
   bool? loading;
   List<dynamic> cityList = [];
@@ -39,9 +40,11 @@ class _HomePageState extends State<HomePage> {
 
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
+    var status = await OneSignal.shared.getDeviceState();
     setState(() {
       Token = sp.getString('token') ?? '';
       userdata = sp.getString('dataregister') ?? sp.getString('datalogin');
+      sUUID = status?.userId;
     });
     STM().checkInternet(context, widget).then((value) {
       if (value) {
@@ -288,8 +291,11 @@ class _HomePageState extends State<HomePage> {
 
   // home api
   void GetHomeApi(id) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     FormData body = FormData.fromMap({
       'city_id': id,
+      'uuid': sUUID,
+      'time': sp.getString('date') ?? '2023-05-03 18:26:54.322612',
     });
     var result = await STM().postWithoutDialog(ctx, 'homePage', body,Token);
     var success = result['success'];
