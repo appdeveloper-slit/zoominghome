@@ -1,6 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoominghome/sidedrawer.dart';
 import 'package:zoominghome/values/strings.dart';
 import 'manage/static_method.dart';
@@ -23,25 +26,43 @@ class _MyWalletState extends State<MyWallet> {
   List<dynamic> datalist = [];
 
 
-
   final List<String> _wordName = [
     "Yes",
     "No",
-
   ];
-
+  String walletamount = '0';
   int _selectedIndex2 = 0;
   int? total;
   double? totalamount;
   final List<String> _wordName2 = [
-    "₹1000",
-    "₹2000",
-    "₹3000",
-    "₹4000",
-    "₹5000",
-    "₹10000",
+    "1000",
+    "2000",
+    "3000",
+    "4000",
+    "5000",
+    "10000",
   ];
+  String? Token;
+  getSession() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    setState(() {
+      Token = sp.getString('token') ?? '';
+      // userdata = sp.getString('dataregister') ?? sp.getString('datalogin');
+    });
+    STM().checkInternet(context, widget).then((value) {
+      if (value) {
+        getWallet();
+        print(Token);
+      }
+    });
+  }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    getSession();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     ctx = context;
@@ -71,11 +92,7 @@ class _MyWalletState extends State<MyWallet> {
               },
               child: SvgPicture.asset('assets/backbtn.svg')),
         ),
-
       ),
-
-
-
       // resizeToAvoidBottomInset: false,
       backgroundColor: Clr().white,
       body: DecoratedBox(
@@ -102,12 +119,9 @@ class _MyWalletState extends State<MyWallet> {
               SizedBox(
                 height: Dim().d24,
               ),
-
               SizedBox(
                 height: Dim().d90,
               ),
-
-
               Row(
                 children: [
                   Text(
@@ -120,7 +134,7 @@ class _MyWalletState extends State<MyWallet> {
                   SvgPicture.asset('assets/coins.svg'),
                   SizedBox(width: Dim().d4),
                   Text(
-                    '2000',
+                    '${walletamount}',
                     style: Sty().largeText.copyWith(
                         color: Clr().primaryColor,
                         fontWeight: FontWeight.w600,
@@ -129,7 +143,6 @@ class _MyWalletState extends State<MyWallet> {
                   SizedBox(width: Dim().d28,),
                   Column(
                     children: [
-
                       InkWell(
                         onTap: (){
                           plansDialog(ctx);
@@ -157,32 +170,75 @@ class _MyWalletState extends State<MyWallet> {
 
                     ],
                   ),
-
-
                 ],
               ),
               SizedBox(
                 height: Dim().d28,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Row(mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    'Sort by ',
-                    style: Sty().largeText.copyWith(
-                        color: Clr().primaryColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 15),
+                  PopupMenuButton(
+                    offset: Offset(-15, 15),
+                    position: PopupMenuPosition.under,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Sort by ',
+                          style: Sty().largeText.copyWith(
+                              color: Clr().primaryColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 15),
+                        ),
+                        SizedBox(width: Dim().d8),
+                        SvgPicture.asset('assets/sortby.svg',height: Dim().d20),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(Dim().d12),
+                        bottomLeft: Radius.circular(Dim().d12),
+                        bottomRight: Radius.circular(Dim().d12),),),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 0,
+                        // row with 2 children
+                        child: SizedBox(
+                          width: Dim().d120,
+                          child: const Text("Debit"),
+                        ),
+                      ),
+                      // PopupMenuItem 2
+                      PopupMenuItem(
+                        value: 1,
+                        // row with two children`
+                        child: SizedBox(
+                          width: Dim().d120,
+                          child: const Text("Credit"),
+                        ),
+                      ), PopupMenuItem(
+                        value: 2,
+                        // row with two children
+                        child: SizedBox(
+                          width: Dim().d120,
+                          child: const Text("Refund"),
+                        ),
+                      ),
+                    ],
+                    onSelected: (value) {
+                      datalist.clear();
+                      getWallet(sortby: value);
+                    },
                   ),
-                  SvgPicture.asset('assets/sortby.svg',height: Dim().d20),
-                  SizedBox(width: Dim().d4),
                 ],
               ),
-
               SizedBox(
                 height: Dim().d8,
               ),
-              Expanded(
+              datalist.isEmpty ?  Expanded(
+                child: SizedBox(height: MediaQuery.of(ctx).size.height/1.3,child: Center(
+                  child: Text('No Transaction',style: Sty().mediumBoldText),
+                ),),
+              ) : Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
@@ -194,9 +250,8 @@ class _MyWalletState extends State<MyWallet> {
                       padding: EdgeInsets.only(top: Dim().d16,right: Dim().d8,left:Dim().d8 ,bottom:Dim().d16 ),
                       shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
-                      itemCount: 10,
+                      itemCount: datalist.length,
                       itemBuilder: (context, index) {
-
                           return Container(
                             decoration: BoxDecoration(
                               boxShadow: [
@@ -232,20 +287,16 @@ class _MyWalletState extends State<MyWallet> {
                                             fontSize: 15),
                                         ),
                                         SizedBox(height: Dim().d8),
-
                                         Text('Date ', style: Sty().smallText.copyWith(
                                             color: Clr().textColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15),
                                         ),
                                         SizedBox(height: Dim().d8),
-                                        Text('Debit', style: Sty().smallText.copyWith(
-                                            color: Clr().red,
+                                        Text(datalist[index]['txn_type'] == 'Debit' ? 'Debit' : datalist[index]['txn_type'], style: Sty().smallText.copyWith(
+                                            color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15),),
-
-
-
+                                            fontSize: 15)),
                                       ],
                                     ),
                                     Column(
@@ -280,21 +331,21 @@ class _MyWalletState extends State<MyWallet> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('234435452335 ', style: Sty().smallText.copyWith(
+                                        Text('${datalist[index]['txn_id']}', style: Sty().smallText.copyWith(
                                             color: Clr().textColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15),
                                         ),
                                         SizedBox(height: Dim().d8),
 
-                                        Text('07-11-2023 ', style: Sty().smallText.copyWith(
+                                        Text('${DateFormat('dd-MM-yyyy').format(DateTime.parse(datalist[index]['txn_date'].toString()))}', style: Sty().smallText.copyWith(
                                             color: Clr().textColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15),
                                         ),
                                         SizedBox(height: Dim().d8),
-                                        Text('-₹2000', style: Sty().smallText.copyWith(
-                                            color: Clr().red,
+                                        Text(datalist[index]['txn_type'] == 'Debit' ? '-₹ ${datalist[index]['amount']}' : '₹ ${datalist[index]['amount']}', style: Sty().smallText.copyWith(
+                                            color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15),),
                                       ],
@@ -380,6 +431,34 @@ class _MyWalletState extends State<MyWallet> {
   // ];
 
 
+  // wallet list
+  void getWallet({sortby}) async {
+    FormData body = FormData.fromMap({
+      'sort_by': sortby,
+    });
+    var result = await STM().postWithoutDialog(ctx, 'walletList', body, Token);
+    setState(() {
+      datalist = result['data'];
+      walletamount = result['wallet_balance'];
+    });
+  }
+
+  // add money to wallet
+  void addWallet() async {
+    FormData body = FormData.fromMap({
+      'add_amount': _wordName2[_selectedIndex2],
+    });
+    var result = await STM().posttoken(ctx, Str().processing, 'addToWallet', body, Token);
+    var success = result['status'];
+    var message = result['message'];
+    if(success){
+      STM().back2Previous(ctx);
+      STM().displayToast(message);
+      getWallet();
+    }else{
+      STM().errorDialog(ctx, message);
+    }
+  }
 
   plansDialog(ctx) {
     AwesomeDialog(
@@ -395,12 +474,9 @@ class _MyWalletState extends State<MyWallet> {
             padding: EdgeInsets.symmetric(horizontal: Dim().d16),
             child: Column(
               children: [
-
-
                 SizedBox(
                   height: Dim().d8,
                 ),
-
                 Text(
                   'Add Money',
                   maxLines: 1,
@@ -477,7 +553,7 @@ class _MyWalletState extends State<MyWallet> {
                                   : SvgPicture.asset('assets/selectDrop.svg'),
                               Padding(
                                 padding: const EdgeInsets.only(left: 6),
-                                child: Text(_wordName2[index2],
+                                child: Text('₹ ${_wordName2[index2]}',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: Sty().smallText.copyWith(
@@ -494,8 +570,6 @@ class _MyWalletState extends State<MyWallet> {
                     ),
                   ),
                 ),
-
-
                 Align(
                   alignment: Alignment.center,
                   child: SizedBox(
@@ -503,7 +577,7 @@ class _MyWalletState extends State<MyWallet> {
                     width: Dim().d180,
                     child: ElevatedButton(
                         onPressed: () {
-                          // STM().redirect2page(ctx, OTPVerification());
+                          addWallet();
                         },
                         style: ElevatedButton.styleFrom(
                             elevation: 0.5,
@@ -528,4 +602,6 @@ class _MyWalletState extends State<MyWallet> {
       }),
     ).show();
   }
+
+
 }

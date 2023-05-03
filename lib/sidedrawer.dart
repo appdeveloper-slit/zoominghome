@@ -140,13 +140,12 @@ Widget navBar(context,key){
                 ),
                 minLeadingWidth : 10,
                 onTap: () {
-                  // var message =
-                  //     'Download The Arham App from below link\n\n https://play.google.com/store/apps/details?id=org.arhamparivar.arhamparivar';
-                  // Share.share(message);
+                  STM().openWeb('https://sonibro.com/zooming_home/privacy');
+                  close(key);
                 },
               ),
               SizedBox(
-                height: 4,
+                height: Dim().d4,
               ),
               ListTile(
                 leading: SizedBox(
@@ -163,6 +162,7 @@ Widget navBar(context,key){
                 minLeadingWidth : 10,
                 onTap: () {
                   // STM().redirect2page(context, CouponCode());
+                  STM().openWeb('https://sonibro.com/zooming_home/terms');
                   close(key);
                 },
               ),
@@ -178,6 +178,7 @@ Widget navBar(context,key){
                 minLeadingWidth : 10,
                 onTap: () {
                   // STM().redirect2page(context, Contact());
+                  STM().openWeb('https://sonibro.com/zooming_home/refund_policy');
                   close(key);
                 },
               ),
@@ -185,7 +186,6 @@ Widget navBar(context,key){
                 height: 4,
               ),
               ListTile(
-
                 leading: SvgPicture.asset('assets/contactus.svg',width: 16,height: 18,),
                 title: Text(
                   'Contact Us',

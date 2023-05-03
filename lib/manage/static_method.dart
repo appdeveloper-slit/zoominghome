@@ -474,6 +474,32 @@ class STM {
     }
     return result;
   }
+  Future<dynamic> getWithoutDialogtoken(ctx, name,token) async {
+    Dio dio = Dio(
+      BaseOptions(
+        headers: {
+          "Content-Type": "application/json",
+          "responseType": "ResponseType.plain",
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+    String url = AppUrl.mainUrl + name;
+    dynamic result;
+    try {
+      Response response = await dio.get(url);
+      if (kDebugMode) {
+        print("Url = $url\nResponse = $response");
+      }
+      if (response.statusCode == 200) {
+        result = response.data;
+        // result = json.decode(response.data.toString());
+      }
+    } on DioError catch (e) {
+      debugPrint(e.message);
+    }
+    return result;
+  }
 
   Future<dynamic> post(ctx, title, name, body) async {
     //Dialog

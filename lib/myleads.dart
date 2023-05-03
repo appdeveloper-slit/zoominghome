@@ -174,7 +174,6 @@ class _MyLeadsState extends State<MyLeads> {
                       fontSize: 24),
                 ),
               ),
-
               SizedBox(
                 height: Dim().d90,
               ),
@@ -323,7 +322,6 @@ class _MyLeadsState extends State<MyLeads> {
                           fontWeight: FontWeight.w400),
                     )),
               ),
-
               SizedBox(
                 height: Dim().d8,
               ),
@@ -332,7 +330,9 @@ class _MyLeadsState extends State<MyLeads> {
                       child: SizedBox(
                         height: MediaQuery.of(ctx).size.height / 1.3,
                         child: Center(
-                          child: Text('No Leads', style: Sty().mediumBoldText),
+                          child: Text(
+                              dobCtrl.text.isEmpty ? 'Select Date' : 'No Leads',
+                              style: Sty().mediumBoldText),
                         ),
                       ),
                     )
@@ -351,7 +351,7 @@ class _MyLeadsState extends State<MyLeads> {
                                 left: Dim().d8,
                                 bottom: Dim().d16),
                             shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemCount: leadList.length,
                             itemBuilder: (context, index) {
                               return cardLayout(ctx, index, leadList);
@@ -360,60 +360,6 @@ class _MyLeadsState extends State<MyLeads> {
                         ),
                       ),
                     ),
-
-              // SizedBox(
-              //   height: Dim().d28,
-              // ),
-
-              // SizedBox(
-              //   height: 52,
-              //   width: 230,
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         STM().redirect2page(ctx, OTPVerification());
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //           elevation: 0.5,
-              //           backgroundColor: Clr().primaryColor,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(35))),
-              //       child: Text(
-              //         'Send OTP',
-              //         style: Sty().mediumText.copyWith(
-              //           fontSize: 16,
-              //             color: Clr().secondaryColor, fontWeight: FontWeight.w400),
-              //       )),
-              // ),
-
-              // SizedBox(
-              //   height: 65,
-              //   width: 370,
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         // STM().redirect2page(ctx, SignUp());
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //           elevation: 0.5,
-              //           backgroundColor: Colors.white,
-              //           side:
-              //           BorderSide(width: 1, color: Clr().primaryColor),
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(15))),
-              //       child: Text(
-              //         'Sign Up',
-              //         style: Sty().largeText.copyWith(
-              //             color: Clr().primaryColor,
-              //             fontWeight: FontWeight.w600),
-              //       )),
-              // ),
-              // SizedBox(
-              //   height: Dim().d16,
-              // ),
-              //
-              //
-              // SizedBox(
-              //   height: Dim().d56,
-              // ),
             ],
           ),
         ),
@@ -535,30 +481,32 @@ class _MyLeadsState extends State<MyLeads> {
                 children: [
                   SizedBox(
                     height: Dim().d44,
-                    width: Dim().d160,
                     child: Card(
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(35),
                           side: BorderSide(width: 0.4, color: Colors.grey)),
-                      child: Center(
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Lead Cost:-",
-                            style: Sty().smallText.copyWith(
-                                  fontSize: 14,
-                                  color: Clr().primaryColor,
-                                  fontWeight: FontWeight.w400,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Dim().d12),
+                        child: Center(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Lead Cost:-",
+                              style: Sty().smallText.copyWith(
+                                    fontSize: 14,
+                                    color: Clr().primaryColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: ' ₹ ${list[index]['lead_cost']}',
+                                  style: Sty().smallText.copyWith(
+                                      color: Clr().textColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15),
                                 ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: ' ₹ ${list[index]['lead_cost']}',
-                                style: Sty().smallText.copyWith(
-                                    color: Clr().textColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> cityList = [];
   List<dynamic> leadList = [];
   dynamic userdata;
+  String walletamount = '0';
 
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     STM().checkInternet(context, widget).then((value) {
       if (value) {
         getCity();
+        print(Token);
       }
     });
   }
@@ -100,22 +102,43 @@ class _HomePageState extends State<HomePage> {
                   );
                   // STM().redirect2page(ctx, NotificationPage(), );
                 },
-                child: SvgPicture.asset('assets/walletcoin.svg'),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Clr().primaryColor,
+                    borderRadius: BorderRadius.circular(Dim().d12)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Dim().d16,vertical: Dim().d8),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset('assets/coins.svg'),
+                        SizedBox(width: Dim().d4),
+                        Text(
+                          '${walletamount}',
+                          style: Sty().largeText.copyWith(
+                              color: Clr().golden,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // SvgPicture.asset('assets/walletcoin.svg'),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: Dim().d16,
-                  bottom: Dim().d16,
-                  right: Dim().d20,
-                  left: Dim().d24),
-              child: InkWell(
-                onTap: () {
-                  STM().redirect2page(
-                    ctx,
-                    NotificationPage(),
-                  );
-                },
+            InkWell(onTap: (){
+              STM().redirect2page(
+                ctx,
+                NotificationPage(),
+              );
+            },
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: Dim().d16,
+                    bottom: Dim().d16,
+                    right: Dim().d20,
+                    left: Dim().d24),
                 child: SvgPicture.asset('assets/bellicon.svg'),
               ),
             )
@@ -274,6 +297,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         leadList = result['data'];
         loading = false;
+        walletamount = result['wallet_balance'];
       });
     }else{
       setState(() {
@@ -290,6 +314,7 @@ class _HomePageState extends State<HomePage> {
     if (status) {
       setState(() {
         cityList = result['data'];
+        GetHomeApi(0);
       });
     }
   }

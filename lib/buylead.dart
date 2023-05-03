@@ -286,12 +286,16 @@ class BuyLeadpage extends State<BuyLead> {
                             contentPadding: EdgeInsets.only(left: 20),
                             // label: Text('Enter Your Number'),
                             hintText: "Enter Coupon Code",
-                            suffixIcon: Padding(
-                              padding:  EdgeInsets.all(16.0),
-                              child: Text('Apply',style: Sty().smallText.copyWith(
-                                  color: Clr().textColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15)),
+                            suffixIcon: InkWell(onTap: (){
+                              mobileCtrl.text.isEmpty ? STM().displayToast('Enter Coupon Code') : getCoupanList();
+                            },
+                              child: Padding(
+                                padding:  EdgeInsets.all(16.0),
+                                child: Text('Apply',style: Sty().smallText.copyWith(
+                                    color: Clr().textColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15)),
+                              ),
                             ),
                             // suffix: Text('Apply'),
                             // labelText: 'Mobile Number',
@@ -401,7 +405,7 @@ class BuyLeadpage extends State<BuyLead> {
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
-                                          text: ' ₹ ${discount == null ? 0: discount}',
+                                          text: ' ₹ ${discount == null ? v['lead_cost'].toString() : discount}',
                                           style: Sty().smallText.copyWith(
                                               color: Clr().textColor,
                                               fontWeight: FontWeight.w600,
@@ -424,7 +428,6 @@ class BuyLeadpage extends State<BuyLead> {
                           width: Dim().d180,
                           child: ElevatedButton(
                               onPressed: () {
-                                // STM().redirect2page(ctx, CouponCode());
                                 MakePayment();
                               },
                               style: ElevatedButton.styleFrom(
@@ -444,72 +447,6 @@ class BuyLeadpage extends State<BuyLead> {
                     ],
                   ),
                 ),
-
-                // Column(
-                //   children: [
-                //     SizedBox(
-                //       height: Dim().d16,
-                //     ),
-                //     SizedBox(
-                //       height: Dim().d48,
-                //       width: Dim().d220,
-                //       child: Card(
-                //         elevation: 1,
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(35),side: BorderSide(width: 1, color:Clr().primaryColor)),
-                //         child: Center(
-                //           child: Row(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               SvgPicture.asset('assets/logout.svg'),
-                //               SizedBox(width: Dim().d8,),
-                //               Text(
-                //                 'Log Out',
-                //                 style: Sty().largeText.copyWith(
-                //                     color: Clr().primaryColor,
-                //                     fontWeight: FontWeight.w400,
-                //                     fontSize: 18),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       height: Dim().d12,
-                //     ),
-                //     Column(
-                //       children: [
-                //
-                //         Text(
-                //           'Delete My Account',
-                //           style: Sty().smallText.copyWith(
-                //               height: 1.5,
-                //               fontSize: 14,
-                //               fontWeight: FontWeight.w300,
-                //               color: Clr().primaryColor),
-                //         ),
-                //         SizedBox(
-                //           height: Dim().d4,
-                //         ),
-                //         Text(
-                //           '____________',
-                //           style: Sty().smallText.copyWith(
-                //               height: -0.1,
-                //               fontSize: 14,
-                //               fontWeight: FontWeight.w400,
-                //               color: Clr().primaryColor),
-                //         ),
-                //         SizedBox(
-                //           height: Dim().d36,
-                //         ),
-                //       ],
-                //     ),
-                //   ],
-                // )
-
-
-
               ],
             ),
           ),
@@ -524,9 +461,9 @@ class BuyLeadpage extends State<BuyLead> {
       'lead_id': v['id'],
       'no_of_leads': _selectedIndex == 0 ? 1 : v['available'],
       'coupon_code': mobileCtrl.text,
-      'coupon_discount': discountprice,
-      'total_amount': discount,
-      'paid_amount': discount,
+      'coupon_discount': discountprice ?? 0,
+      'total_amount': discount ?? v['lead_cost'].toString(),
+      'paid_amount': discount ?? v['lead_cost'].toString(),
     });
     var result = await STM().posttoken(ctx, Str().processing, 'buyLead', body, token);
     var status = result['success'];
@@ -535,6 +472,48 @@ class BuyLeadpage extends State<BuyLead> {
      STM().successDialogWithAffinity(ctx, message, LeadDetails2(details: result['data'],leaddetails: widget.leaddetails,));
     }else{
       STM().errorDialog(ctx, message);
+    }
+  }
+
+
+  // coupanList
+  void getCoupanList() async {
+    List<dynamic> coupanList = [];
+    var result = await STM().get(ctx, Str().loading, 'coupon_list');
+    var status = result['status'];
+    if(status){
+      setState(() {
+        coupanList = result['data'];
+      });
+      for(int a = 0; a < coupanList.length;a++) {
+        if (coupanList.map((e) => e['coupon_code']).contains(mobileCtrl.text)) {
+          applyCoupans(list: coupanList,index: a);
+        }else{
+          STM().errorDialog(ctx, 'This coupon code is expire or not applicable');
+        }
+      }
+    }
+  }
+
+  void applyCoupans({list,index}) async {
+    FormData body = FormData.fromMap({
+      'coupon_code': mobileCtrl.text,
+      'amount': v['lead_cost'].toString(),
+    });
+    var result = await STM().posttoken(ctx, Str().processing, 'apply_coupon', body,token);
+    var status = result['status'];
+    if(status){
+      setState(() {
+        discount = result['data'].toString();
+        discountprice = list[index]['coupon_flat_discount'].toString();
+        print(discount);
+        print(discountprice);
+      });
+      // BuyLeadpage.controller.sink.add({
+      //   'codename': code,
+      //   'discount': result['data'],
+      //   'discount_price': duscountprice,
+      // });
     }
   }
 

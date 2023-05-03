@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:zoominghome/sidedrawer.dart';
-
 import 'manage/static_method.dart';
 import 'values/colors.dart';
 import 'values/dimens.dart';
@@ -17,17 +16,14 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   late BuildContext ctx;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-
+  List<dynamic> notificationList = [];
+  
   @override
   Widget build(BuildContext context) {
     ctx = context;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       // bottomNavigationBar: bottomBarLayout(ctx, 2),
-
-
-
       // appBar: AppBar(
       //   backgroundColor: Colors.transparent,
       //   elevation: 0.0,
@@ -43,7 +39,6 @@ class _NotificationPageState extends State<NotificationPage> {
       // ),
       key: scaffoldState,
       drawer: navBar(ctx,scaffoldState),
-
       // resizeToAvoidBottomInset: false,
       backgroundColor: Clr().white,
       body: SingleChildScrollView(
@@ -94,11 +89,15 @@ class _NotificationPageState extends State<NotificationPage> {
                 SizedBox(
                   height: Dim().d80,
                 ),
-
-                ListView.builder(
+                notificationList.isEmpty ? SizedBox(
+                  height: MediaQuery.of(ctx).size.height / 1.3,
+                  child: Center(
+                    child: Text('No Notifications',style: Sty().mediumBoldText),
+                  ),
+                ) : ListView.builder(
                   shrinkWrap: true,
                   physics:  BouncingScrollPhysics(),
-                  itemCount: 10,
+                  itemCount: notificationList.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
@@ -144,13 +143,6 @@ class _NotificationPageState extends State<NotificationPage> {
                     );
                   },
                 ),
-
-
-
-
-
-
-
               ],
             ),
           ),

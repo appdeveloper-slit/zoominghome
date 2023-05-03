@@ -195,6 +195,52 @@ class Sty {
       fontSize: 14.0,
     ),
   );
+  InputDecoration TextFormFieldOutlineDarkStyleWithProfile = InputDecoration(
+    filled: true,
+    fillColor: Clr().white,
+    contentPadding: EdgeInsets.symmetric(
+      horizontal: Dim().d14,
+      vertical: Dim().d12,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Clr().lightGrey,
+      ),
+      borderRadius: BorderRadius.circular(
+        Dim().d12,
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Clr().lightGrey,
+      ),
+      borderRadius: BorderRadius.circular(
+        Dim().d12,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Clr().errorRed,
+      ),
+      borderRadius: BorderRadius.circular(
+        Dim().d12,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Clr().errorRed,
+      ),
+      borderRadius: BorderRadius.circular(
+        Dim().d12,
+      ),
+    ),
+    errorStyle: TextStyle(
+      fontFamily: 'Rubik',
+      letterSpacing: 0.5,
+      color: Clr().errorRed,
+      fontSize: 14.0,
+    ),
+  );
 
   InputDecoration TextFormFieldGreyDarkStyle = InputDecoration(
     filled: true,

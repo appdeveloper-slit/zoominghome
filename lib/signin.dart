@@ -277,10 +277,10 @@ void LoginApi() async {
     var message = result['message'];
     if(success){
       STM().displayToast(message);
-      OTPVerification(list2: [{
+      STM().redirect2page(ctx, OTPVerification(list2: [{
         'mobile': mobileCtrl.text,
         'page_type': 'login',
-      }]);
+      }]));
     }else{
       STM().errorDialog(ctx, message);
     }

@@ -305,14 +305,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                     setState(() {
                                       again = false;
                                     });
-                                    // STM.checkInternet().then((value) {
-                                    //   if (value) {
-                                    //     sendOTP();
-                                    //   } else {
-                                    //     STM.internetAlert(ctx, widget);
-                                    //   }
-                                    // });
-                                    // resendOTP(widget.sMobile);
+                                    resendOtp();
                                   },
                                   child: Text(
                                     'Resend Code',
@@ -354,16 +347,28 @@ class _OTPVerificationState extends State<OTPVerification> {
     var success = result['success'];
     var message = result['message'];
     if (success) {
-      widget.list != null ? STM().successDialogWithAffinity(ctx, message, SingIn()) : STM().successDialogWithAffinity(ctx, message, HomePage());
       sp.setBool('login', true);
       widget.list != null ? sp.setString('dataregister', result['data']['name']) : sp.setString('datalogin', result['user_info']['name']);
-      widget.list != null ? null : sp.setString('token', result['customer_token']);
+      sp.setString('token', result['customer_token']);
+      STM().successDialogWithAffinity(ctx, message, HomePage());
     } else {
       STM().errorDialog(ctx, message);
     }
   }
 
-
+  void resendOtp() async {
+    FormData body = FormData.fromMap({
+      'mobile': widget.list != null ? widget.list[0]['mobile'] : widget.list2[0]['mobile'],
+    });
+    var result = await STM().post(ctx, Str().sendingOtp, 'resendOtp', body);
+    var success = result['success'];
+    var message = result['message'];
+    if(success){
+      STM().displayToast(message);
+    }else{
+      STM().errorDialog(ctx, message);
+    }
+  }
 
 
 }

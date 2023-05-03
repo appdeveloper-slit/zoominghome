@@ -32,6 +32,7 @@ class _SignUpState extends State<SignUp> {
     STM().checkInternet(context, widget).then((value) {
       if (value) {
         getCity();
+        getBusiness();
       }
     });
   }
@@ -101,8 +102,7 @@ class _SignUpState extends State<SignUp> {
                               children: [
                                 Container(
                                   height: 350,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.43,
+                                  width: MediaQuery.of(context).size.width * 0.43,
                                   // width:  170,
                                   decoration: BoxDecoration(
                                     boxShadow: [
@@ -217,9 +217,9 @@ class _SignUpState extends State<SignUp> {
                               style: TextStyle(color: Color(0xff787882)),
                               items: BusinessCatList.map(( string) {
                                 return DropdownMenuItem(
-                                  value: string,
+                                  value: string['name'],
                                   child: Text(
-                                    string,
+                                    string['name'],
                                     style: Sty().mediumText.copyWith(
                                           color: Clr().textColor,
                                         ),
@@ -527,14 +527,14 @@ class _SignUpState extends State<SignUp> {
     var message = result['message'];
     if (success) {
       STM().displayToast(message);
-      OTPVerification(list: [{
-        'business_category': businessId,
-        'city_id': cityId,
-        'name': nameCtrl.text,
-        'mobile': mobileCtrl.text,
-        'email': emailCtrl.text,
-        'page_type': 'register',
-      }]);
+     STM().redirect2page(ctx,  OTPVerification(list: [{
+       'business_category': businessId,
+       'city_id': cityId,
+       'name': nameCtrl.text,
+       'mobile': mobileCtrl.text,
+       'email': emailCtrl.text,
+       'page_type': 'register',
+     }]));
     } else {
       STM().errorDialog(ctx, message);
     }
