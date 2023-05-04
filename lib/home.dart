@@ -30,9 +30,9 @@ class _HomePageState extends State<HomePage> {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController nameCtrl = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-  String? cityCat, Token,sUUID;
+  String? cityCat, Token, sUUID;
   int? cityId;
-  bool? loading;
+  bool? loading, count;
   List<dynamic> cityList = [];
   List<dynamic> leadList = [];
   dynamic userdata;
@@ -69,17 +69,6 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         bottomNavigationBar: bottomBarLayout(ctx, 0),
-        // appBar: AppBar(
-        //     toolbarHeight: boolTrue ? kToolbarHeight : 0.0;
-        //
-        //     // title: Text(''),
-        //   // automaticallyImplyLeading: false,
-        //   // backgroundColor: Colors.transparent,
-        //   backgroundColor: Color(0x44000000),
-        //   elevation: 0,
-        // ),
-        // extendBodyBehindAppBar: true,
-
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -92,32 +81,20 @@ class _HomePageState extends State<HomePage> {
                 child: SvgPicture.asset('assets/drawer.svg')),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: Dim().d12,
-                bottom: Dim().d12,
-              ),
+            Padding(padding: EdgeInsets.only(top: Dim().d12, bottom: Dim().d12),
               child: InkWell(
                 onTap: () {
-                  STM().redirect2page(
-                    ctx,
-                    MyWallet(),
-                  );
-                  // STM().redirect2page(ctx, NotificationPage(), );
+                  STM().redirect2page(ctx, MyWallet());
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Clr().primaryColor,
-                    borderRadius: BorderRadius.circular(Dim().d12)
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Dim().d16,vertical: Dim().d8),
+                  decoration: BoxDecoration(color: Clr().primaryColor, borderRadius: BorderRadius.circular(Dim().d12)),
+                  child: Padding(padding: EdgeInsets.symmetric(horizontal: Dim().d16),
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/coins.svg'),
-                        SizedBox(width: Dim().d4),
-                        Text(
-                          '${walletamount}',
+                        SvgPicture.asset('assets/mywallet.svg',width: 16,height: 18,color: Clr().golden),
+                        SizedBox(width: Dim().d8),
+                        SvgPicture.asset('assets/coin.svg',width: 16,height: 14),
+                        Text(' ${walletamount}',
                           style: Sty().largeText.copyWith(
                               color: Clr().golden,
                               fontWeight: FontWeight.w600,
@@ -130,20 +107,30 @@ class _HomePageState extends State<HomePage> {
                 // SvgPicture.asset('assets/walletcoin.svg'),
               ),
             ),
-            InkWell(onTap: (){
-              STM().redirect2page(
-                ctx,
-                NotificationPage(),
-              );
-            },
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: Dim().d16,
-                    bottom: Dim().d16,
-                    right: Dim().d20,
-                    left: Dim().d24),
-                child: SvgPicture.asset('assets/bellicon.svg'),
-              ),
+            InkWell(
+              onTap: () {
+                STM().redirect2page(
+                  ctx,
+                  NotificationPage(),
+                );
+              },
+              child: count == true
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                          top: Dim().d16,
+                          bottom: Dim().d16,
+                          right: Dim().d20,
+                          left: Dim().d24),
+                      child: SvgPicture.asset('assets/notificationbell.svg'),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          top: Dim().d16,
+                          bottom: Dim().d16,
+                          right: Dim().d20,
+                          left: Dim().d24),
+                      child: SvgPicture.asset('assets/bellicon.svg'),
+                    ),
             )
           ],
         ),
@@ -209,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         size: 28,
                         color: Clr().primaryColor,
                       ),
-                      style: TextStyle(color: Color(0xff787882)),
+                      style: const TextStyle(color: Color(0xff787882)),
                       items: cityList.map((string) {
                         return DropdownMenuItem(
                           value: string['name'],
@@ -221,13 +208,17 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (t) {
+                      onChanged: (t)async {
+                        SharedPreferences sp = await SharedPreferences.getInstance();
+                        int? position;
                         // STM().redirect2page(ctx, Home());
                         setState(() {
                           cityCat = t.toString();
-                          int position = cityList.indexWhere((e) => e['name'].toString() == cityCat.toString());
-                          cityId = cityList[position]['id'];
+                          position = cityList.indexWhere((e) => e['name'].toString() == cityCat.toString());
+                          cityId = cityList[position!]['id'];
                           loading = true;
+                          print(cityId);
+                          sp.setInt('cityId', cityId!);
                         });
                         GetHomeApi(cityId);
                       },
@@ -239,24 +230,24 @@ class _HomePageState extends State<HomePage> {
                 ),
                 loading == true
                     ? Expanded(
-                      child: SizedBox(
-                          height: MediaQuery.of(ctx).size.height / 1.3,
-                          child: Center(
-                              child: Text(
-                            'Loading Leads...',
-                            style: Sty().mediumBoldText,
-                          ))),
-                    )
+                        child: SizedBox(
+                            height: MediaQuery.of(ctx).size.height / 1.3,
+                            child: Center(
+                                child: Text(
+                              'Loading Leads...',
+                              style: Sty().mediumBoldText,
+                            ))),
+                      )
                     : leadList.isEmpty
                         ? Expanded(
-                          child: SizedBox(
-                              height: MediaQuery.of(ctx).size.height / 1.3,
-                              child: Center(
-                                  child: Text(
-                                    cityCat == null ? 'Select City' : 'No Leads',
-                                style: Sty().mediumBoldText,
-                              ))),
-                        )
+                            child: SizedBox(
+                                height: MediaQuery.of(ctx).size.height / 1.3,
+                                child: Center(
+                                    child: Text(
+                                  cityCat == null ? 'Select City' : 'No Leads',
+                                  style: Sty().mediumBoldText,
+                                ))),
+                          )
                         : Expanded(
                             child: MediaQuery.removePadding(
                               context: context,
@@ -297,15 +288,18 @@ class _HomePageState extends State<HomePage> {
       'uuid': sUUID,
       'time': sp.getString('date') ?? '2023-05-03 18:26:54.322612',
     });
-    var result = await STM().postWithoutDialog(ctx, 'homePage', body,Token);
+    var result = await STM().postWithoutDialog(ctx, 'homePage', body, Token);
     var success = result['success'];
     if (result != null) {
       setState(() {
         leadList = result['data'];
         loading = false;
         walletamount = result['wallet_balance'];
+        sp.setString('walletamount', result['wallet_balance']);
+        count = result['count'];
+        sp.setBool('count', result['count']);
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
@@ -315,18 +309,23 @@ class _HomePageState extends State<HomePage> {
 
 // getCity
   void getCity() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     var result = await STM().getWithoutDialog(ctx, 'cityList');
     var status = result['status'];
     if (status) {
       setState(() {
         cityList = result['data'];
-        GetHomeApi(0);
+        int id = sp.getInt('cityId') ?? 0;
+        int position = cityList.indexWhere((element) => element['id'] == id);
+        cityCat = id == 0 ? null : cityList[position]['name'];
+        GetHomeApi(id);
+        print(cityCat);
+        print(id);
       });
     }
   }
 
   // card Layout
-
   Widget cardLayout(ctx, index, list) {
     return InkWell(
         onTap: () {
@@ -365,7 +364,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(list[index]['date'].toString()))}',
+                            text:
+                                ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(list[index]['date'].toString()))}',
                             style: Sty().smallText.copyWith(
                                 color: Clr().textColor,
                                 fontWeight: FontWeight.w500,
@@ -396,7 +396,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: ' ${list[index]['available'].toString()}',
+                                  text:
+                                      ' ${list[index]['available'].toString()}',
                                   style: Sty().smallText.copyWith(
                                       color: Clr().textColor,
                                       fontWeight: FontWeight.w700,
@@ -464,7 +465,8 @@ class _HomePageState extends State<HomePage> {
                             side: BorderSide(width: 0.6, color: Colors.grey)),
                         child: Center(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: Dim().d12),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: Dim().d12),
                             child: RichText(
                               text: TextSpan(
                                 text: "Lead Cost:-",
@@ -475,7 +477,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text: ' ₹ ${list[index]['lead_cost'].toString()}',
+                                    text:
+                                        ' ₹ ${list[index]['lead_cost'].toString()}',
                                     style: Sty().smallText.copyWith(
                                         color: Clr().textColor,
                                         fontWeight: FontWeight.w600,
@@ -495,4 +498,5 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
+
 }

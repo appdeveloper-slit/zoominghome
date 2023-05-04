@@ -56,314 +56,322 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: bottomBarLayout(ctx, 2),
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: Padding(
-          padding: EdgeInsets.all(Dim().d16),
-          child: InkWell(
-              onTap: () {
-                STM().back2Previous(ctx);
-              },
-              child: SvgPicture.asset('assets/backbtn.svg')),
+    return WillPopScope(onWillPop: ()async{
+      STM().back2Previous(ctx);
+      return false;
+    },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        bottomNavigationBar: bottomBarLayout(ctx, 2),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          leading: Padding(
+            padding: EdgeInsets.all(Dim().d16),
+            child: InkWell(
+                onTap: () {
+                  STM().back2Previous(ctx);
+                },
+                child: SvgPicture.asset('assets/backbtn.svg')),
+          ),
         ),
-      ),
-      key: scaffoldState,
-      drawer: navBar(ctx, scaffoldState),
-      // resizeToAvoidBottomInset: false,
-      backgroundColor: Clr().white,
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/pattern.png'),
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topCenter)),
-        child: Padding(
-          padding: EdgeInsets.all(Dim().d16),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Dim().d60,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'My Profile',
-                  style: Sty().largeText.copyWith(
-                      color: Clr().primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24),
+        key: scaffoldState,
+        drawer: navBar(ctx, scaffoldState),
+        // resizeToAvoidBottomInset: false,
+        backgroundColor: Clr().white,
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/pattern.png'),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter)),
+          child: Padding(
+            padding: EdgeInsets.all(Dim().d16),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: Dim().d60,
                 ),
-              ),
-              SizedBox(
-                height: Dim().d100,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: Dim().d8,
-                      right: Dim().d8,
-                      top: Dim().d16,
-                      bottom: Dim().d16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [
-                        Text('Category:-',
-                            style: Sty().smallText.copyWith(
-                                  fontSize: Dim().d16,
-                                  color: Clr().primaryColor,
-                                  fontWeight: FontWeight.w100,
-                                )),
-                        SizedBox(width: Dim().d14),
-                        SizedBox(
-                          width: Dim().d220,
-                          height: Dim().d40,
-                          child: DropdownButtonFormField(
-                            value: businessCat,
-                            hint: Text('Select Business Category',
-                              style: Sty().smallText.copyWith(
-                                color: Clr().textColor,
-                              ),
-                            ),
-                            isExpanded: true,
-                            decoration: Sty().TextFormFieldOutlineDarkStyleWithProfile.copyWith(
-                              fillColor: Clr().white,
-                              filled: true,
-                            ),
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 20,
-                              color: Clr().primaryColor,
-                            ),
-                            style: TextStyle(color: Color(0xff787882)),
-                            items: BusinessCatList.map((string) {
-                              return DropdownMenuItem(
-                                value: string['name'],
-                                child: Text(
-                                  string['name'],
-                                  style: Sty().mediumText.copyWith(
-                                    color: Clr().textColor,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (t) {
-                              setState(() {
-                                businessCat = t.toString();
-                                int position = BusinessCatList.indexWhere((e) => e['name'].toString() == businessCat.toString());
-                                businessId = BusinessCatList[position]['id'];
-                              });
-                            },
-                          )
-                          // TextField(
-                          //   controller: catCtrl,
-                          //   keyboardType: TextInputType.text,
-                          //   decoration: Sty()
-                          //       .TextFormFieldOutlineDarkStyleWithProfile
-                          //       .copyWith(
-                          //         fillColor: Clr().white,
-                          //         filled: true,
-                          //       ),
-                          // ),
-                        ),
-                      ]),
-                      SizedBox(
-                        height: Dim().d16,
-                      ),
-                      Row(children: [
-                        Text('Name:-',
-                            style: Sty().smallText.copyWith(
-                                  fontSize: Dim().d16,
-                                  color: Clr().primaryColor,
-                                  fontWeight: FontWeight.w100,
-                                )),
-                        SizedBox(
-                          width: Dim().d12,
-                        ),
-                        SizedBox(
-                          width: Dim().d220,
-                          height: Dim().d32,
-                          child: TextField(
-                            controller: nameCtrl,
-                            keyboardType: TextInputType.text,
-                            decoration: Sty()
-                                .TextFormFieldOutlineDarkStyleWithProfile
-                                .copyWith(
-                                  fillColor: Clr().white,
-                                  filled: true,
-                                ),
-                          ),
-                        ),
-                      ]),
-                      SizedBox(
-                        height: Dim().d16,
-                      ),
-                      Row(
-                        children: [
-                          Row(children: [
-                            Text('Mobile No.:-',
-                                style: Sty().smallText.copyWith(
-                                      fontSize: Dim().d16,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w100,
-                                    )),
-                            SizedBox(
-                              width: Dim().d220,
-                              height: Dim().d20,
-                              child: TextField(
-                                controller: mobileCtrl,
-                                readOnly: true,
-                                keyboardType: TextInputType.text,
-                                decoration:
-                                    Sty().TextFormFieldWithoutStyle.copyWith(
-                                          fillColor: Clr().white,
-                                          filled: true,
-                                        ),
-                              ),
-                            ),
-                          ]),
-                          InkWell(
-                              onTap: () {
-                                updateMobileNumber();
-                              },
-                              child: SvgPicture.asset('assets/editbtn.svg')),
-                        ],
-                      ),
-                      SizedBox(height: Dim().d16),
-                      Row(children: [
-                        Text('Email Address:-',
-                            style: Sty().smallText.copyWith(
-                                  fontSize: Dim().d16,
-                                  color: Clr().primaryColor,
-                                  fontWeight: FontWeight.w100,
-                                )),
-                        SizedBox(
-                          width: Dim().d220,
-                          height: Dim().d32,
-                          child: TextField(
-                            controller: emailCtrl,
-                            keyboardType: TextInputType.text,
-                            decoration: Sty()
-                                .TextFormFieldOutlineDarkStyleWithProfile
-                                .copyWith(
-                                  fillColor: Clr().white,
-                                  filled: true,
-                                ),
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: Dim().d36),
-                      Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: Dim().d40,
-                          width: Dim().d180,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                updateProfile();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 0.5,
-                                  backgroundColor: Clr().primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(35))),
-                              child: Text(
-                                'Update',
-                                style: Sty().mediumText.copyWith(
-                                    fontSize: 16,
-                                    color: Clr().secondaryColor,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                        ),
-                      ),
-                    ],
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'My Profile',
+                    style: Sty().largeText.copyWith(
+                        color: Clr().primaryColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: Dim().d16,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences sp =
-                          await SharedPreferences.getInstance();
-                      sp.clear();
-                      STM().finishAffinity(context, SingIn());
-                    },
-                    child: SizedBox(
-                      height: Dim().d48,
-                      width: Dim().d220,
-                      child: Card(
-                        elevation: 0.5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35),
-                            side: BorderSide(
-                                width: 1, color: Clr().primaryColor)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logout.svg'),
-                              SizedBox(
-                                width: Dim().d8,
-                              ),
-                              Text(
-                                'Log Out',
-                                style: Sty().largeText.copyWith(
-                                    color: Clr().primaryColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: Dim().d8,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      deleteProfile();
-                    },
+                SizedBox(
+                  height: Dim().d100,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: Dim().d8,
+                        right: Dim().d8,
+                        top: Dim().d16,
+                        bottom: Dim().d16),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Delete My Account',
-                          style: Sty().smallText.copyWith(
-                              height: 1.5,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
-                              color: Clr().primaryColor),
-                        ),
+                        Row(children: [
+                          Text('Category:-',
+                              style: Sty().smallText.copyWith(
+                                    fontSize: Dim().d16,
+                                    color: Clr().primaryColor,
+                                    fontWeight: FontWeight.w100,
+                                  )),
+                          SizedBox(width: Dim().d14),
+                          SizedBox(
+                            width: Dim().d220,
+                            height: Dim().d40,
+                            child: DropdownButtonFormField(
+                              value: businessCat,
+                              hint: Text('Select Business Category',
+                                style: Sty().smallText.copyWith(
+                                  color: Clr().textColor,
+                                ),
+                              ),
+                              isExpanded: true,
+                              decoration: Sty().TextFormFieldOutlineDarkStyleWithProfile.copyWith(
+                                fillColor: Clr().white,
+                                filled: true,
+                              ),
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: Clr().primaryColor,
+                              ),
+                              style: TextStyle(color: Color(0xff787882)),
+                              items: BusinessCatList.map((string) {
+                                return DropdownMenuItem(
+                                  value: string['name'],
+                                  child: Text(
+                                    string['name'],
+                                    style: Sty().mediumText.copyWith(
+                                      color: Clr().textColor,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (t) {
+                                setState(() {
+                                  businessCat = t.toString();
+                                  int position = BusinessCatList.indexWhere((e) => e['name'].toString() == businessCat.toString());
+                                  businessId = BusinessCatList[position]['id'];
+                                });
+                              },
+                            )
+                            // TextField(
+                            //   controller: catCtrl,
+                            //   keyboardType: TextInputType.text,
+                            //   decoration: Sty()
+                            //       .TextFormFieldOutlineDarkStyleWithProfile
+                            //       .copyWith(
+                            //         fillColor: Clr().white,
+                            //         filled: true,
+                            //       ),
+                            // ),
+                          ),
+                        ]),
                         SizedBox(
-                          height: Dim().d4,
+                          height: Dim().d16,
                         ),
-                        Text(
-                          '____________',
-                          style: Sty().smallText.copyWith(
-                              height: -0.1,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Clr().primaryColor),
-                        ),
+                        Row(children: [
+                          Text('Name:-',
+                              style: Sty().smallText.copyWith(
+                                    fontSize: Dim().d16,
+                                    color: Clr().primaryColor,
+                                    fontWeight: FontWeight.w100,
+                                  )),
+                          SizedBox(
+                            width: Dim().d12,
+                          ),
+                          SizedBox(
+                            width: Dim().d220,
+                            height: Dim().d32,
+                            child: TextField(
+                              controller: nameCtrl,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: Sty()
+                                  .TextFormFieldOutlineDarkStyleWithProfile
+                                  .copyWith(
+                                    fillColor: Clr().white,
+                                    filled: true,
+                                  ),
+                            ),
+                          ),
+                        ]),
                         SizedBox(
-                          height: Dim().d28,
+                          height: Dim().d16,
+                        ),
+                        Row(
+                          children: [
+                            Row(children: [
+                              Text('Mobile No.:-',
+                                  style: Sty().smallText.copyWith(
+                                        fontSize: Dim().d16,
+                                        color: Clr().primaryColor,
+                                        fontWeight: FontWeight.w100,
+                                      )),
+                              SizedBox(
+                                width: Dim().d220,
+                                height: Dim().d20,
+                                child: TextField(
+                                  controller: mobileCtrl,
+                                  readOnly: true,
+                                  autofocus: false,
+                                  keyboardType: TextInputType.text,
+                                  decoration:
+                                      Sty().TextFormFieldWithoutStyle.copyWith(
+                                            fillColor: Clr().white,
+                                            filled: true,
+                                          ),
+                                ),
+                              ),
+                            ]),
+                            InkWell(
+                                onTap: () {
+                                  updateMobileNumber();
+                                },
+                                child: SvgPicture.asset('assets/editbtn.svg')),
+                          ],
+                        ),
+                        SizedBox(height: Dim().d16),
+                        Row(children: [
+                          Text('Email Address:-',
+                              style: Sty().smallText.copyWith(
+                                    fontSize: Dim().d16,
+                                    color: Clr().primaryColor,
+                                    fontWeight: FontWeight.w100,
+                                  )),
+                          SizedBox(
+                            width: Dim().d220,
+                            height: Dim().d32,
+                            child: TextField(
+                              controller: emailCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              autofocus: false,
+                              decoration: Sty()
+                                  .TextFormFieldOutlineDarkStyleWithProfile
+                                  .copyWith(
+                                    fillColor: Clr().white,
+                                    filled: true,
+                                  ),
+                            ),
+                          ),
+                        ]),
+                        SizedBox(height: Dim().d36),
+                        Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: Dim().d40,
+                            width: Dim().d180,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  updateProfile();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0.5,
+                                    backgroundColor: Clr().primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(35))),
+                                child: Text(
+                                  'Update',
+                                  style: Sty().mediumText.copyWith(
+                                      fontSize: 16,
+                                      color: Clr().secondaryColor,
+                                      fontWeight: FontWeight.w400),
+                                )),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              )
-            ],
+                ),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: Dim().d16,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        SharedPreferences sp =
+                            await SharedPreferences.getInstance();
+                        sp.clear();
+                        STM().finishAffinity(context, SingIn());
+                      },
+                      child: SizedBox(
+                        height: Dim().d48,
+                        width: Dim().d220,
+                        child: Card(
+                          elevation: 0.5,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              side: BorderSide(
+                                  width: 1, color: Clr().primaryColor)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset('assets/logout.svg'),
+                                SizedBox(
+                                  width: Dim().d8,
+                                ),
+                                Text(
+                                  'Log Out',
+                                  style: Sty().largeText.copyWith(
+                                      color: Clr().primaryColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: Dim().d8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        deleteProfile();
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            'Delete My Account',
+                            style: Sty().smallText.copyWith(
+                                height: 1.5,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                color: Clr().primaryColor),
+                          ),
+                          SizedBox(
+                            height: Dim().d4,
+                          ),
+                          Text(
+                            '____________',
+                            style: Sty().smallText.copyWith(
+                                height: -0.1,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Clr().primaryColor),
+                          ),
+                          SizedBox(
+                            height: Dim().d28,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -372,16 +380,19 @@ class _MyProfileState extends State<MyProfile> {
 
   // get profile
   void getProfile() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     var result =
         await STM().getWithoutDialogtoken(ctx, 'profileDetails', Token);
     var success = result['success'];
     if (success) {
       setState(() {
-        businessCat = result['data']['category']['name'];
         nameCtrl = TextEditingController(text: result['data']['name']);
         mobileCtrl = TextEditingController(text: result['data']['mobile']);
         emailCtrl = TextEditingController(text: result['data']['email']);
         id = result['data']['id'];
+        sp.setString('dataregister', result['data']['name']);
+        sp.setString('datalogin', result['data']['name']);
+        businessCat = result['data']['category']['name'];
       });
     }
   }

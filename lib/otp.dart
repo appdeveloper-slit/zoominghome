@@ -350,6 +350,7 @@ class _OTPVerificationState extends State<OTPVerification> {
       sp.setBool('login', true);
       widget.list != null ? sp.setString('dataregister', result['data']['name']) : sp.setString('datalogin', result['user_info']['name']);
       sp.setString('token', result['customer_token']);
+      widget.list != null ? sp.setInt('cityId',  widget.list[0]['city_id']) : null;
       STM().successDialogWithAffinity(ctx, message, HomePage());
     } else {
       STM().errorDialog(ctx, message);

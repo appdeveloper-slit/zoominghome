@@ -451,14 +451,8 @@ class _LeadDetailsState extends State<LeadDetails> {
                         ),
                       ),
                       SizedBox(height: Dim().d16),
-
-
-
-
                     ],
                   ),
-
-
 
                   // Column(
                   //   children: [

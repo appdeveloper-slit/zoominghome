@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoominghome/leaddetails2.dart';
+import 'package:zoominghome/notifications.dart';
 import 'package:zoominghome/sidedrawer.dart';
 import 'package:zoominghome/values/strings.dart';
 import 'bottom_navigation/bottom_navigation.dart';
@@ -77,12 +78,14 @@ class _MyLeadsState extends State<MyLeads> {
     }
   }
 
-  String? Token;
-
+  String? Token,walletamount;
+  bool? count;
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
       Token = sp.getString('token') ?? '';
+      walletamount = sp.getString('walletamount') ?? '0';
+      count = sp.getBool('count') ?? false;
     });
     STM().checkInternet(context, widget).then((value) {
       if (value) {
@@ -101,266 +104,305 @@ class _MyLeadsState extends State<MyLeads> {
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: bottomBarLayout(ctx, 1),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: Padding(
-          padding: EdgeInsets.all(18),
-          child: InkWell(
-              onTap: () {
-                scaffoldState.currentState?.openDrawer();
-              },
-              child: SvgPicture.asset('assets/drawer.svg')),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(
-              top: Dim().d12,
-              bottom: Dim().d12,
-            ),
+    return WillPopScope(onWillPop: ()async{
+      STM().back2Previous(ctx);
+      return false;
+    },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        bottomNavigationBar: bottomBarLayout(ctx, 1),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          leading: Padding(
+            padding: EdgeInsets.all(18),
             child: InkWell(
+                onTap: () {
+                  scaffoldState.currentState?.openDrawer();
+                },
+                child: SvgPicture.asset('assets/drawer.svg')),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: Dim().d12,
+                bottom: Dim().d12,
+              ),
+              child: InkWell(
+                onTap: () {
+                  STM().redirect2page(
+                    ctx,
+                    MyWallet(),
+                  );
+                  // STM().redirect2page(ctx, NotificationPage(), );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Clr().primaryColor,
+                      borderRadius: BorderRadius.circular(Dim().d12)),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Dim().d16),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset('assets/mywallet.svg',width: 16,height: 18,color: Clr().golden),
+                        SizedBox(width: Dim().d8),
+                        SvgPicture.asset('assets/coin.svg',width: 16,height: 14),
+                        Text(' ${walletamount}',
+                          style: Sty().largeText.copyWith(
+                              color: Clr().golden,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // SvgPicture.asset('assets/walletcoin.svg'),
+              ),
+            ),
+            InkWell(
               onTap: () {
                 STM().redirect2page(
                   ctx,
-                  MyWallet(),
+                  NotificationPage(),
                 );
               },
-              child: SvgPicture.asset('assets/walletcoin.svg'),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: Dim().d16,
-                bottom: Dim().d16,
-                right: Dim().d20,
-                left: Dim().d24),
-            child: InkWell(
-              onTap: () {
-                // STM().redirect2page(ctx, NotificationPage(), );
-              },
-              child: SvgPicture.asset('assets/bellicon.svg'),
-            ),
-          )
-        ],
-      ),
-      key: scaffoldState,
-      drawer: navBar(ctx, scaffoldState),
-
-      // resizeToAvoidBottomInset: false,
-      backgroundColor: Clr().white,
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/pattern.png'),
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topCenter)),
-        child: Padding(
-          padding: EdgeInsets.all(Dim().d16),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Dim().d80,
+              child: count == true
+                  ? Padding(
+                padding: EdgeInsets.only(
+                    top: Dim().d16,
+                    bottom: Dim().d16,
+                    right: Dim().d20,
+                    left: Dim().d24),
+                child: SvgPicture.asset('assets/notificationbell.svg'),
+              )
+                  : Padding(
+                padding: EdgeInsets.only(
+                    top: Dim().d16,
+                    bottom: Dim().d16,
+                    right: Dim().d20,
+                    left: Dim().d24),
+                child: SvgPicture.asset('assets/bellicon.svg'),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'My Leads',
-                  style: Sty().largeText.copyWith(
-                      color: Clr().primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24),
+            )
+          ],
+        ),
+        key: scaffoldState,
+        drawer: navBar(ctx, scaffoldState),
+        // resizeToAvoidBottomInset: false,
+        backgroundColor: Clr().white,
+        body: DecoratedBox(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/pattern.png'),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter)),
+          child: Padding(
+            padding: EdgeInsets.all(Dim().d16),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: Dim().d80,
                 ),
-              ),
-              SizedBox(
-                height: Dim().d90,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(35),
-                          ),
-                          color: Clr().white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 0.5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          onTap: () {
-                            datePicker();
-                          },
-                          controller: dobCtrl,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Pickup date is required';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(top: 16, bottom: 16),
-                              child: SvgPicture.asset('assets/calendar.svg'),
-                            ),
-                            fillColor: Clr().white,
-                            border: InputBorder.none,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Clr().transparent)),
-                            focusColor: Clr().primaryColor,
-                            contentPadding:
-                                EdgeInsets.only(top: 18, bottom: 18),
-                            hintText: "Select Date",
-                            hintStyle: Sty().smallText.copyWith(
-                                color: Clr().textColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15),
-                            counterText: "",
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: Dim().d8,
-                    ),
-                    Text(
-                      'to',
-                      style: Sty().mediumText,
-                    ),
-                    SizedBox(
-                      width: Dim().d8,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(35),
-                          ),
-                          color: Clr().white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 0.5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          onTap: () {
-                            datePicker1();
-                          },
-                          controller: dobCtrl1,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Pickup date is required';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(top: 16, bottom: 16),
-                              child: SvgPicture.asset('assets/calendar.svg'),
-                            ),
-                            fillColor: Clr().white,
-                            border: InputBorder.none,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Clr().transparent)),
-                            focusColor: Clr().primaryColor,
-                            contentPadding:
-                                const EdgeInsets.only(top: 18, bottom: 18),
-                            hintText: "Select Date",
-                            hintStyle: Sty().smallText.copyWith(
-                                color: Clr().textColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15),
-                            counterText: "",
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'My Leads',
+                    style: Sty().largeText.copyWith(
+                        color: Clr().primaryColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: Dim().d44,
-                width: Dim().d146,
-                child: ElevatedButton(
-                    onPressed: () {
-                      getMyLeads();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0.5,
-                        backgroundColor: Clr().primaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35))),
-                    child: Text(
-                      'Submit',
-                      style: Sty().mediumText.copyWith(
-                          fontSize: 16,
-                          color: Clr().secondaryColor,
-                          fontWeight: FontWeight.w400),
-                    )),
-              ),
-              SizedBox(
-                height: Dim().d8,
-              ),
-              leadList.isEmpty
-                  ? Expanded(
-                      child: SizedBox(
-                        height: MediaQuery.of(ctx).size.height / 1.3,
-                        child: Center(
-                          child: Text(
-                              dobCtrl.text.isEmpty ? 'Select Date' : 'No Leads',
-                              style: Sty().mediumBoldText),
-                        ),
-                      ),
-                    )
-                  : Expanded(
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: RawScrollbar(
-                          thumbColor: Clr().secondaryColor,
-                          radius: Radius.circular(16),
-                          thickness: 5,
-                          child: ListView.builder(
-                            padding: EdgeInsets.only(
-                                top: Dim().d16,
-                                right: Dim().d8,
-                                left: Dim().d8,
-                                bottom: Dim().d16),
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: leadList.length,
-                            itemBuilder: (context, index) {
-                              return cardLayout(ctx, index, leadList);
+                SizedBox(
+                  height: Dim().d90,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(35),
+                            ),
+                            color: Clr().white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 0.5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            onTap: () {
+                              datePicker();
                             },
+                            controller: dobCtrl,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Pickup date is required';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(top: 16, bottom: 16),
+                                child: SvgPicture.asset('assets/calendar.svg'),
+                              ),
+                              fillColor: Clr().white,
+                              border: InputBorder.none,
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: Clr().transparent)),
+                              focusColor: Clr().primaryColor,
+                              contentPadding:
+                                  EdgeInsets.only(top: 18, bottom: 18),
+                              hintText: "Select Date",
+                              hintStyle: Sty().smallText.copyWith(
+                                  color: Clr().textColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15),
+                              counterText: "",
+                            ),
                           ),
                         ),
                       ),
-                    ),
-            ],
+                      SizedBox(
+                        width: Dim().d8,
+                      ),
+                      Text(
+                        'to',
+                        style: Sty().mediumText,
+                      ),
+                      SizedBox(
+                        width: Dim().d8,
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(35),
+                            ),
+                            color: Clr().white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 0.5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            onTap: () {
+                              datePicker1();
+                            },
+                            controller: dobCtrl1,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Pickup date is required';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(top: 16, bottom: 16),
+                                child: SvgPicture.asset('assets/calendar.svg'),
+                              ),
+                              fillColor: Clr().white,
+                              border: InputBorder.none,
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: Clr().transparent)),
+                              focusColor: Clr().primaryColor,
+                              contentPadding:
+                                  const EdgeInsets.only(top: 18, bottom: 18),
+                              hintText: "Select Date",
+                              hintStyle: Sty().smallText.copyWith(
+                                  color: Clr().textColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15),
+                              counterText: "",
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: Dim().d44,
+                  width: Dim().d146,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        getMyLeads();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0.5,
+                          backgroundColor: Clr().primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(35))),
+                      child: Text(
+                        'Submit',
+                        style: Sty().mediumText.copyWith(
+                            fontSize: 16,
+                            color: Clr().secondaryColor,
+                            fontWeight: FontWeight.w400),
+                      )),
+                ),
+                SizedBox(
+                  height: Dim().d8,
+                ),
+                leadList.isEmpty
+                    ? Expanded(
+                        child: SizedBox(
+                          height: MediaQuery.of(ctx).size.height / 1.3,
+                          child: Center(
+                            child: Text(
+                                dobCtrl.text.isEmpty ? 'Select Date' : 'No Leads',
+                                style: Sty().mediumBoldText),
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: RawScrollbar(
+                            thumbColor: Clr().secondaryColor,
+                            radius: Radius.circular(16),
+                            thickness: 5,
+                            child: ListView.builder(
+                              padding: EdgeInsets.only(
+                                  top: Dim().d16,
+                                  right: Dim().d8,
+                                  left: Dim().d8,
+                                  bottom: Dim().d16),
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: leadList.length,
+                              itemBuilder: (context, index) {
+                                return cardLayout(ctx, index, leadList);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

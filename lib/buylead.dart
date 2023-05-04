@@ -31,6 +31,7 @@ class BuyLeadpage extends State<BuyLead> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   String? discount,discountprice;
+  int? totalcount;
   final List<String> _wordName = [
     "Buy ONE Lead",
     "Buy ALL Leads",
@@ -43,6 +44,7 @@ class BuyLeadpage extends State<BuyLead> {
     STM().checkInternet(context, widget).then((value) {
       if (value) {
         // getCity();
+        totalAmount(0);
       }
     });
   }
@@ -236,6 +238,7 @@ class BuyLeadpage extends State<BuyLead> {
                                 onTap: () {
                                   setState(() {
                                     _selectedIndex = index;
+                                    totalAmount(index);
                                   });
                                 },
                                 child: Row(
@@ -316,7 +319,7 @@ class BuyLeadpage extends State<BuyLead> {
                             InkWell(
                               onTap: () {
                                 // downloadInv();
-                                STM().redirect2page(ctx, CouponCode(amount: v['lead_cost'].toString(),));
+                                STM().redirect2page(ctx, CouponCode(amount: totalcount,));
                               },
                               child: Text(
                                 'View All Coupons',
@@ -352,7 +355,7 @@ class BuyLeadpage extends State<BuyLead> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: ' ₹ ${v['lead_cost'].toString()}',
+                              text: '₹ ${totalcount}',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,
@@ -405,7 +408,7 @@ class BuyLeadpage extends State<BuyLead> {
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
-                                          text: ' ₹ ${discount == null ? v['lead_cost'].toString() : discount}',
+                                          text: ' ₹ ${discount ?? totalcount}',
                                           style: Sty().smallText.copyWith(
                                               color: Clr().textColor,
                                               fontWeight: FontWeight.w600,
@@ -462,8 +465,8 @@ class BuyLeadpage extends State<BuyLead> {
       'no_of_leads': _selectedIndex == 0 ? 1 : v['available'],
       'coupon_code': mobileCtrl.text,
       'coupon_discount': discountprice ?? 0,
-      'total_amount': discount ?? v['lead_cost'].toString(),
-      'paid_amount': discount ?? v['lead_cost'].toString(),
+      'total_amount': discount ?? totalcount,
+      'paid_amount': discount ?? totalcount,
     });
     var result = await STM().posttoken(ctx, Str().processing, 'buyLead', body, token);
     var status = result['success'];
@@ -498,7 +501,7 @@ class BuyLeadpage extends State<BuyLead> {
   void applyCoupans({list,index}) async {
     FormData body = FormData.fromMap({
       'coupon_code': mobileCtrl.text,
-      'amount': v['lead_cost'].toString(),
+      'amount': totalcount,
     });
     var result = await STM().posttoken(ctx, Str().processing, 'apply_coupon', body,token);
     var status = result['status'];
@@ -514,6 +517,22 @@ class BuyLeadpage extends State<BuyLead> {
       //   'discount': result['data'],
       //   'discount_price': duscountprice,
       // });
+    }
+  }
+
+  void totalAmount(index){
+    int leadcost = int.parse(v['lead_cost'].toString());
+    int available = v['available'];
+    if(index == 1) {
+      setState(() {
+        mobileCtrl.clear();
+        discount = null;
+        totalcount = leadcost * available;
+      });
+    }else{
+      mobileCtrl.clear();
+      discount = null;
+      totalcount = leadcost;
     }
   }
 

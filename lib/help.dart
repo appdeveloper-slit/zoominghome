@@ -53,22 +53,9 @@ class _HelpState extends State<Help> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         bottomNavigationBar: bottomBarLayout(ctx, 3),
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0.0,
-        //   leading:Padding(
-        //     padding: EdgeInsets.all(Dim().d16),
-        //     child: InkWell(
-        //         onTap: (){
-        //           STM().back2Previous(ctx);
-        //         },
-        //         child: SvgPicture.asset('assets/backbtn.svg')),
-        //   ),
-        //
         // ),
         key: scaffoldState,
         drawer: navBar(ctx,scaffoldState),
-
         // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
         body: SingleChildScrollView(

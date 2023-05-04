@@ -13,7 +13,7 @@ import 'values/dimens.dart';
 import 'values/styles.dart';
 
 class CouponCode extends StatefulWidget {
-  final String? amount;
+  final int? amount;
   const CouponCode({super.key,this.amount});
 
   @override

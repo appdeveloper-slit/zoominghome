@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zoominghome/home.dart';
 import 'package:zoominghome/sidedrawer.dart';
 import 'package:zoominghome/values/strings.dart';
 import 'manage/static_method.dart';
@@ -66,357 +67,362 @@ class _MyWalletState extends State<MyWallet> {
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      key: scaffoldState,
-      drawer: navBar(ctx,scaffoldState),
-      // appBar: AppBar(
-      //     toolbarHeight: boolTrue ? kToolbarHeight : 0.0;
-      //
-      //     // title: Text(''),
-      //   // automaticallyImplyLeading: false,
-      //   // backgroundColor: Colors.transparent,
-      //   backgroundColor: Color(0x44000000),
-      //   elevation: 0,
-      // ),
-      // extendBodyBehindAppBar: true,
+    return WillPopScope(onWillPop: ()async{
+      STM().finishAffinity(ctx, HomePage());
+      return false;
+    },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        key: scaffoldState,
+        drawer: navBar(ctx,scaffoldState),
+        // appBar: AppBar(
+        //     toolbarHeight: boolTrue ? kToolbarHeight : 0.0;
+        //
+        //     // title: Text(''),
+        //   // automaticallyImplyLeading: false,
+        //   // backgroundColor: Colors.transparent,
+        //   backgroundColor: Color(0x44000000),
+        //   elevation: 0,
+        // ),
+        // extendBodyBehindAppBar: true,
 
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading:Padding(
-          padding: EdgeInsets.all(Dim().d16),
-          child: InkWell(
-              onTap: (){
-                STM().back2Previous(ctx);
-              },
-              child: SvgPicture.asset('assets/backbtn.svg')),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          leading:Padding(
+            padding: EdgeInsets.all(Dim().d16),
+            child: InkWell(
+                onTap: (){
+                  STM().finishAffinity(ctx, HomePage());
+                },
+                child: SvgPicture.asset('assets/backbtn.svg')),
+          ),
         ),
-      ),
-      // resizeToAvoidBottomInset: false,
-      backgroundColor: Clr().white,
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/pattern.png'),fit: BoxFit.fitWidth,alignment: Alignment.topCenter)
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(Dim().d16),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Dim().d60,
-              ),
-              Align(
-                 alignment: Alignment.center,
-                child: Text(
-                  'My Wallet',
-                  style: Sty().largeText.copyWith(
-                      color: Clr().primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24),
+        // resizeToAvoidBottomInset: false,
+        backgroundColor: Clr().white,
+        body: DecoratedBox(
+          decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/pattern.png'),fit: BoxFit.fitWidth,alignment: Alignment.topCenter)
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(Dim().d16),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: Dim().d60,
                 ),
-              ) ,
-              SizedBox(
-                height: Dim().d24,
-              ),
-              SizedBox(
-                height: Dim().d90,
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Coins:- ',
+                Align(
+                   alignment: Alignment.center,
+                  child: Text(
+                    'My Wallet',
                     style: Sty().largeText.copyWith(
                         color: Clr().primaryColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 18),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24),
                   ),
-                  SvgPicture.asset('assets/coins.svg'),
-                  SizedBox(width: Dim().d4),
-                  Text(
-                    '${walletamount}',
-                    style: Sty().largeText.copyWith(
-                        color: Clr().primaryColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18),
-                  ),
-                  SizedBox(width: Dim().d28,),
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          plansDialog(ctx);
-                        },
-                        child: Text(
-                          '+ Add Money',
+                ) ,
+                SizedBox(
+                  height: Dim().d24,
+                ),
+                SizedBox(
+                  height: Dim().d90,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'Coins:- ',
+                      style: Sty().largeText.copyWith(
+                          color: Clr().primaryColor,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18),
+                    ),
+                    SvgPicture.asset('assets/coins.svg'),
+                    SizedBox(width: Dim().d4),
+                    Text(
+                      '${walletamount}',
+                      style: Sty().largeText.copyWith(
+                          color: Clr().primaryColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18),
+                    ),
+                    SizedBox(width: Dim().d28,),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            plansDialog(ctx);
+                          },
+                          child: Text(
+                            '+ Add Money',
+                            style: Sty().smallText.copyWith(
+                                height: 1.5,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                                color: Clr().primaryColor),
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dim().d2,
+                        ),
+                        Text(
+                          '________',
                           style: Sty().smallText.copyWith(
-                              height: 1.5,
+                              height: -0.1,
                               fontSize: 14,
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w400,
                               color: Clr().primaryColor),
                         ),
-                      ),
-                      SizedBox(
-                        height: Dim().d2,
-                      ),
-                      Text(
-                        '________',
-                        style: Sty().smallText.copyWith(
-                            height: -0.1,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Clr().primaryColor),
-                      ),
 
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: Dim().d28,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  PopupMenuButton(
-                    offset: Offset(-15, 15),
-                    position: PopupMenuPosition.under,
-                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Sort by ',
-                          style: Sty().largeText.copyWith(
-                              color: Clr().primaryColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 15),
-                        ),
-                        SizedBox(width: Dim().d8),
-                        SvgPicture.asset('assets/sortby.svg',height: Dim().d20),
                       ],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(Dim().d12),
-                        bottomLeft: Radius.circular(Dim().d12),
-                        bottomRight: Radius.circular(Dim().d12),),),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 0,
-                        // row with 2 children
-                        child: SizedBox(
-                          width: Dim().d120,
-                          child: const Text("Debit"),
-                        ),
+                  ],
+                ),
+                SizedBox(
+                  height: Dim().d28,
+                ),
+                Row(mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    PopupMenuButton(
+                      offset: Offset(-15, 15),
+                      position: PopupMenuPosition.under,
+                      child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Sort by ',
+                            style: Sty().largeText.copyWith(
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 15),
+                          ),
+                          SizedBox(width: Dim().d8),
+                          SvgPicture.asset('assets/sortby.svg',height: Dim().d20),
+                        ],
                       ),
-                      // PopupMenuItem 2
-                      PopupMenuItem(
-                        value: 1,
-                        // row with two children`
-                        child: SizedBox(
-                          width: Dim().d120,
-                          child: const Text("Credit"),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(Dim().d12),
+                          bottomLeft: Radius.circular(Dim().d12),
+                          bottomRight: Radius.circular(Dim().d12),),),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 0,
+                          // row with 2 children
+                          child: SizedBox(
+                            width: Dim().d120,
+                            child: const Text("Debit"),
+                          ),
                         ),
-                      ), PopupMenuItem(
-                        value: 2,
-                        // row with two children
-                        child: SizedBox(
-                          width: Dim().d120,
-                          child: const Text("Refund"),
+                        // PopupMenuItem 2
+                        PopupMenuItem(
+                          value: 1,
+                          // row with two children`
+                          child: SizedBox(
+                            width: Dim().d120,
+                            child: const Text("Credit"),
+                          ),
+                        ), PopupMenuItem(
+                          value: 2,
+                          // row with two children
+                          child: SizedBox(
+                            width: Dim().d120,
+                            child: const Text("Refund"),
+                          ),
                         ),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      datalist.clear();
-                      getWallet(sortby: value);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: Dim().d8,
-              ),
-              datalist.isEmpty ?  Expanded(
-                child: SizedBox(height: MediaQuery.of(ctx).size.height/1.3,child: Center(
-                  child: Text('No Transaction',style: Sty().mediumBoldText),
-                ),),
-              ) : Expanded(
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: RawScrollbar(
-                    thumbColor: Clr().secondaryColor,
-                    radius: Radius.circular(16),
-                    thickness: 5,
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(top: Dim().d16,right: Dim().d8,left:Dim().d8 ,bottom:Dim().d16 ),
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: datalist.length,
-                      itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Clr().borderColor.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 20,
-                                  offset: const Offset(2, 8),
-                                ),
-                              ],
-                            ),
-                            child: Card(
-                              elevation: 0.2,
-                              margin: EdgeInsets.only(bottom: 14),
-                              shape:  RoundedRectangleBorder(
-                                // side: BorderSide(color:Clr().borderColor2 ,width: 0.5),
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                              color: const Color(0xffFFFFFF),
-                              child:Padding(
-                                padding: EdgeInsets.all(Dim().d16),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Transaction ID ', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
-                                        Text('Date ', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
-                                        Text(datalist[index]['txn_type'] == 'Debit' ? 'Debit' : datalist[index]['txn_type'], style: Sty().smallText.copyWith(
-                                            color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15)),
-                                      ],
-                                    ),
-                                    Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(':', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
+                      ],
+                      onSelected: (value) {
+                        datalist.clear();
+                        getWallet(sortby: value);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: Dim().d8,
+                ),
+                datalist.isEmpty ?  Expanded(
+                  child: SizedBox(height: MediaQuery.of(ctx).size.height/1.3,child: Center(
+                    child: Text('No Transaction',style: Sty().mediumBoldText),
+                  ),),
+                ) : Expanded(
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: RawScrollbar(
+                      thumbColor: Clr().secondaryColor,
+                      radius: Radius.circular(16),
+                      thickness: 5,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(top: Dim().d16,right: Dim().d8,left:Dim().d8 ,bottom:Dim().d16 ),
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: datalist.length,
+                        itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Clr().borderColor.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 20,
+                                    offset: const Offset(2, 8),
+                                  ),
+                                ],
+                              ),
+                              child: Card(
+                                elevation: 0.2,
+                                margin: EdgeInsets.only(bottom: 14),
+                                shape:  RoundedRectangleBorder(
+                                  // side: BorderSide(color:Clr().borderColor2 ,width: 0.5),
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                                color: const Color(0xffFFFFFF),
+                                child:Padding(
+                                  padding: EdgeInsets.all(Dim().d16),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Transaction ID ', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
+                                          Text('Date ', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
+                                          Text(datalist[index]['txn_type'] == 'Debit' ? 'Debit' : datalist[index]['txn_type'], style: Sty().smallText.copyWith(
+                                              color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15)),
+                                        ],
+                                      ),
+                                      Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(':', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
 
-                                        Text(':', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
-                                        Text(':', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
-                                        ),
+                                          Text(':', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
+                                          Text(':', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                          ),
 
 
-                                      ],
-                                    ),
-                                    Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${datalist[index]['txn_id']}', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
+                                        ],
+                                      ),
+                                      Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${datalist[index]['txn_id']}', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
 
-                                        Text('${DateFormat('dd-MM-yyyy').format(DateTime.parse(datalist[index]['txn_date'].toString()))}', style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15),
-                                        ),
-                                        SizedBox(height: Dim().d8),
-                                        Text(datalist[index]['txn_type'] == 'Debit' ? '-₹ ${datalist[index]['amount']}' : '₹ ${datalist[index]['amount']}', style: Sty().smallText.copyWith(
-                                            color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15),),
-                                      ],
-                                    ),
-                                  ],
+                                          Text('${DateFormat('dd-MM-yyyy').format(DateTime.parse(datalist[index]['txn_date'].toString()))}', style: Sty().smallText.copyWith(
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),
+                                          ),
+                                          SizedBox(height: Dim().d8),
+                                          Text(datalist[index]['txn_type'] == 'Debit' ? '-₹ ${datalist[index]['amount']}' : '₹ ${datalist[index]['amount']}', style: Sty().smallText.copyWith(
+                                              color: datalist[index]['txn_type'] == 'Debit' ? Clr().red : Clr().green,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15),),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
 
-                      },
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
 
 
-              // SizedBox(
-              //   height: Dim().d28,
-              // ),
+                // SizedBox(
+                //   height: Dim().d28,
+                // ),
 
-              // SizedBox(
-              //   height: 52,
-              //   width: 230,
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         STM().redirect2page(ctx, OTPVerification());
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //           elevation: 0.5,
-              //           backgroundColor: Clr().primaryColor,
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(35))),
-              //       child: Text(
-              //         'Send OTP',
-              //         style: Sty().mediumText.copyWith(
-              //           fontSize: 16,
-              //             color: Clr().secondaryColor, fontWeight: FontWeight.w400),
-              //       )),
-              // ),
+                // SizedBox(
+                //   height: 52,
+                //   width: 230,
+                //   child: ElevatedButton(
+                //       onPressed: () {
+                //         STM().redirect2page(ctx, OTPVerification());
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //           elevation: 0.5,
+                //           backgroundColor: Clr().primaryColor,
+                //           shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(35))),
+                //       child: Text(
+                //         'Send OTP',
+                //         style: Sty().mediumText.copyWith(
+                //           fontSize: 16,
+                //             color: Clr().secondaryColor, fontWeight: FontWeight.w400),
+                //       )),
+                // ),
 
-              // SizedBox(
-              //   height: 65,
-              //   width: 370,
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         // STM().redirect2page(ctx, SignUp());
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //           elevation: 0.5,
-              //           backgroundColor: Colors.white,
-              //           side:
-              //           BorderSide(width: 1, color: Clr().primaryColor),
-              //           shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(15))),
-              //       child: Text(
-              //         'Sign Up',
-              //         style: Sty().largeText.copyWith(
-              //             color: Clr().primaryColor,
-              //             fontWeight: FontWeight.w600),
-              //       )),
-              // ),
-              // SizedBox(
-              //   height: Dim().d16,
-              // ),
-              //
-              //
-              // SizedBox(
-              //   height: Dim().d56,
-              // ),
-            ],
+                // SizedBox(
+                //   height: 65,
+                //   width: 370,
+                //   child: ElevatedButton(
+                //       onPressed: () {
+                //         // STM().redirect2page(ctx, SignUp());
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //           elevation: 0.5,
+                //           backgroundColor: Colors.white,
+                //           side:
+                //           BorderSide(width: 1, color: Clr().primaryColor),
+                //           shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(15))),
+                //       child: Text(
+                //         'Sign Up',
+                //         style: Sty().largeText.copyWith(
+                //             color: Clr().primaryColor,
+                //             fontWeight: FontWeight.w600),
+                //       )),
+                // ),
+                // SizedBox(
+                //   height: Dim().d16,
+                // ),
+                //
+                //
+                // SizedBox(
+                //   height: Dim().d56,
+                // ),
+              ],
+            ),
           ),
         ),
       ),
