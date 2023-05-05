@@ -1,4 +1,4 @@
-package com.example.zoominghome;
+package com.app.zoominghome;
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -355,7 +355,7 @@ class BuyLeadpage extends State<BuyLead> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '₹ ${totalcount}',
+                              text: '₹ ${v['lead_cost'].toString()}',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,

@@ -53,10 +53,6 @@ class _HelpState extends State<Help> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         bottomNavigationBar: bottomBarLayout(ctx, 3),
-        // ),
-        key: scaffoldState,
-        drawer: navBar(ctx,scaffoldState),
-        // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
         body: SingleChildScrollView(
           child: DecoratedBox(

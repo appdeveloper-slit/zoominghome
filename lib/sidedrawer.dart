@@ -26,7 +26,7 @@ Widget navBar(context,key){
         return true;
       },
       child: Drawer(
-        width: 300,
+        width: 270,
         backgroundColor: Clr().secondaryColor,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(left: Dim().d8),
@@ -36,14 +36,11 @@ Widget navBar(context,key){
                 height: Dim().d44,
               ),
               Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding:  EdgeInsets.only(left: Dim().d32),
-                  child: Image.asset(
-                    'assets/splogo.png',width: 220,
-                    height: Dim().d80,
-                    fit: BoxFit.contain,
-                  ),
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/splogo.png',width: 220,
+                  height: Dim().d80,
+                  fit: BoxFit.contain,
                 ),
               ),
               SizedBox(

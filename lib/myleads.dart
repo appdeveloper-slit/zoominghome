@@ -89,7 +89,7 @@ class _MyLeadsState extends State<MyLeads> {
     });
     STM().checkInternet(context, widget).then((value) {
       if (value) {
-        // getCity();
+        getMyLeads();
       }
     });
   }
@@ -415,7 +415,7 @@ class _MyLeadsState extends State<MyLeads> {
       'toTime': dobCtrl1.text,
     });
     var result = await STM()
-        .posttoken(ctx, Str().processing, 'buyedLeadList', body, Token);
+        .posttoken(ctx, Str().loading, 'buyedLeadList', body, Token);
     var status = result['status'];
     if (status) {
       setState(() {

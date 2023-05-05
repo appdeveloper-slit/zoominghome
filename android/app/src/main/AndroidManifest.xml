@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zoominghome">
+    package="com.app.zoominghome">
    <application
         android:label="Zooming Home"
         android:name="${applicationName}"

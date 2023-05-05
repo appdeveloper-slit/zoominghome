@@ -146,7 +146,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    '${notificationList[index]['created_at']}',
+                                    '${notificationList[index]['created_on']}',
                                     style: TextStyle(
                                       color: Color(0xff28282A),
                                       fontSize: 12,
@@ -169,9 +169,8 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   // getNotifications
-
 void getNotification() async {
-    var result = await STM().getWithoutDialog(ctx, 'notification');
+    var result = await STM().getWithoutDialogtoken(ctx, 'notification',Token);
     var success = result['success'];
     if(success){
       setState(() {
