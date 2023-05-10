@@ -10,7 +10,8 @@ import 'values/styles.dart';
 
 class LeadDetails extends StatefulWidget {
   final dynamic leaddeatils;
-  const LeadDetails({super.key,this.leaddeatils});
+
+  const LeadDetails({super.key, this.leaddeatils});
 
   @override
   State<LeadDetails> createState() => _LeadDetailsState();
@@ -22,6 +23,7 @@ class _LeadDetailsState extends State<LeadDetails> {
   TextEditingController emailCtrl = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   var v;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -33,7 +35,7 @@ class _LeadDetailsState extends State<LeadDetails> {
   Widget build(BuildContext context) {
     ctx = context;
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         STM().back2Previous(ctx);
         return false;
       },
@@ -53,14 +55,16 @@ class _LeadDetailsState extends State<LeadDetails> {
         //
         // ),
         key: scaffoldState,
-        drawer: navBar(ctx,scaffoldState),
+        drawer: navBar(ctx, scaffoldState),
         // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
         body: SingleChildScrollView(
           child: DecoratedBox(
             decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage('assets/pattern.png'),fit: BoxFit.fitWidth,alignment: Alignment.topCenter)
-            ),
+                image: DecorationImage(
+                    image: AssetImage('assets/pattern.png'),
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter)),
             child: Padding(
               padding: EdgeInsets.all(Dim().d16),
               child: Column(
@@ -87,10 +91,14 @@ class _LeadDetailsState extends State<LeadDetails> {
                   Align(
                       alignment: Alignment.centerLeft,
                       child: InkWell(
-                          onTap: (){
+                          onTap: () {
                             STM().back2Previous(ctx);
                           },
-                          child: SvgPicture.asset('assets/backbtn.svg',height: 20,width: 20,))),
+                          child: SvgPicture.asset(
+                            'assets/backbtn.svg',
+                            height: 20,
+                            width: 20,
+                          ))),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -100,34 +108,35 @@ class _LeadDetailsState extends State<LeadDetails> {
                           fontWeight: FontWeight.w500,
                           fontSize: 24),
                     ),
-                  ) ,
+                  ),
                   SizedBox(
                     height: Dim().d120,
                   ),
 
-
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          text: "Available:-",
-                          style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' ${v['available']}',
-                              style: Sty().smallText.copyWith(
-                                  color: Clr().textColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15),
+                      v['available'] == 'Sold Out'
+                          ? Container()
+                          : RichText(
+                              text: TextSpan(
+                                text: "Available:-",
+                                style: Sty().smallText.copyWith(
+                                      fontSize: 14,
+                                      color: Clr().primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' ${v['available']}',
+                                    style: Sty().smallText.copyWith(
+                                        color: Clr().textColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                       SizedBox(
                         height: Dim().d16,
                       ),
@@ -135,13 +144,14 @@ class _LeadDetailsState extends State<LeadDetails> {
                         text: TextSpan(
                           text: "Date:-",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(v['date'].toString()))}',
+                              text:
+                                  ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(v['date'].toString()))}',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,
@@ -157,10 +167,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                         text: TextSpan(
                           text: "Name:-",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' ${v['name']}',
@@ -179,10 +189,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                         text: TextSpan(
                           text: "Location: ",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: '${v['city']['name']}',
@@ -201,10 +211,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                         text: TextSpan(
                           text: "Mobile No.:-",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' **********',
@@ -213,7 +223,6 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 15),
                             ),
-
                           ],
                         ),
                       ),
@@ -222,10 +231,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                         text: TextSpan(
                           text: "Address:-",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' ***********************',
@@ -234,7 +243,6 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 15),
                             ),
-
                           ],
                         ),
                       ),
@@ -251,13 +259,14 @@ class _LeadDetailsState extends State<LeadDetails> {
                           ],
                         ),
                         child: Card(
-                          margin:  EdgeInsets.only(bottom: 20),
-                          shape:  RoundedRectangleBorder(
-                            side: BorderSide(width: 1,color: Clr().secondaryColor),
+                          margin: EdgeInsets.only(bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1, color: Clr().secondaryColor),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10))),
+                                  BorderRadius.all(Radius.circular(10))),
                           color: const Color(0xffFFFFFF),
-                          child:Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(Dim().d16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +276,8 @@ class _LeadDetailsState extends State<LeadDetails> {
                                     'Description',
                                     style: Sty().mediumText.copyWith(
                                         fontSize: 18,
-                                        color: Clr().primaryColor, fontWeight: FontWeight.w600),
+                                        color: Clr().primaryColor,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 SizedBox(
@@ -277,10 +287,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   text: TextSpan(
                                     text: "Requirements:- ",
                                     style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: 14,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: '${v['requirements']}',
@@ -305,10 +315,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   text: TextSpan(
                                     text: "Budget:-",
                                     style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: 14,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: ' ₹ ${v['budget']}',
@@ -327,10 +337,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   text: TextSpan(
                                     text: "Type:-",
                                     style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: 14,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: ' ${v['type']}',
@@ -349,10 +359,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   text: TextSpan(
                                     text: "Size:-",
                                     style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: 14,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: ' ${v['size']}',
@@ -369,10 +379,10 @@ class _LeadDetailsState extends State<LeadDetails> {
                                   text: TextSpan(
                                     text: "Comment:-",
                                     style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: 14,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: ' ${v['comments']}',
@@ -401,18 +411,21 @@ class _LeadDetailsState extends State<LeadDetails> {
                               child: Card(
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(35),side: BorderSide(width: 0.6, color: Colors.grey)),
+                                    borderRadius: BorderRadius.circular(35),
+                                    side: BorderSide(
+                                        width: 0.6, color: Colors.grey)),
                                 child: Center(
                                   child: Padding(
-                                    padding:  EdgeInsets.symmetric(horizontal: Dim().d12),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: Dim().d12),
                                     child: RichText(
                                       text: TextSpan(
                                         text: "Lead Cost:-",
                                         style: Sty().smallText.copyWith(
-                                          fontSize: 14,
-                                          color: Clr().primaryColor,
-                                          fontWeight: FontWeight.w400,
-                                        ),
+                                              fontSize: 14,
+                                              color: Clr().primaryColor,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: ' ₹ ${v['lead_cost']}',
@@ -428,25 +441,33 @@ class _LeadDetailsState extends State<LeadDetails> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: Dim().d40,
-                              width: Dim().d150,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    STM().redirect2page(ctx, BuyLead(leaddetails: widget.leaddeatils,));
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0.5,
-                                      backgroundColor: Clr().primaryColor,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(35))),
-                                  child: Text(
-                                    'Buy Lead',
-                                    style: Sty().mediumText.copyWith(
-                                        fontSize: 16,
-                                        color: Clr().secondaryColor, fontWeight: FontWeight.w400),
-                                  )),
-                            ),
+                            v['available'] == 'Sold Out'
+                                ? Container()
+                                : SizedBox(
+                                    height: Dim().d40,
+                                    width: Dim().d150,
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          STM().redirect2page(
+                                              ctx,
+                                              BuyLead(
+                                                leaddetails: widget.leaddeatils,
+                                              ));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            elevation: 0.5,
+                                            backgroundColor: Clr().primaryColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(35))),
+                                        child: Text(
+                                          'Buy Lead',
+                                          style: Sty().mediumText.copyWith(
+                                              fontSize: 16,
+                                              color: Clr().secondaryColor,
+                                              fontWeight: FontWeight.w400),
+                                        )),
+                                  ),
                           ],
                         ),
                       ),
@@ -516,9 +537,6 @@ class _LeadDetailsState extends State<LeadDetails> {
                   //     ),
                   //   ],
                   // )
-
-
-
                 ],
               ),
             ),

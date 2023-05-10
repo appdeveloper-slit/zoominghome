@@ -81,20 +81,27 @@ class _HomePageState extends State<HomePage> {
                 child: SvgPicture.asset('assets/drawer.svg')),
           ),
           actions: [
-            Padding(padding: EdgeInsets.only(top: Dim().d12, bottom: Dim().d12),
+            Padding(
+              padding: EdgeInsets.only(top: Dim().d12, bottom: Dim().d12),
               child: InkWell(
                 onTap: () {
                   STM().redirect2page(ctx, MyWallet());
                 },
                 child: Container(
-                  decoration: BoxDecoration(color: Clr().primaryColor, borderRadius: BorderRadius.circular(Dim().d12)),
-                  child: Padding(padding: EdgeInsets.symmetric(horizontal: Dim().d16),
+                  decoration: BoxDecoration(
+                      color: Clr().primaryColor,
+                      borderRadius: BorderRadius.circular(Dim().d12)),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Dim().d16),
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/mywallet.svg',width: 16,height: 18,color: Clr().golden),
+                        SvgPicture.asset('assets/mywallet.svg',
+                            width: 16, height: 18, color: Clr().golden),
                         SizedBox(width: Dim().d8),
-                        SvgPicture.asset('assets/coin.svg',width: 16,height: 14),
-                        Text(' ${walletamount}',
+                        SvgPicture.asset('assets/coin.svg',
+                            width: 16, height: 14),
+                        Text(
+                          ' ${walletamount}',
                           style: Sty().largeText.copyWith(
                               color: Clr().golden,
                               fontWeight: FontWeight.w600,
@@ -166,23 +173,24 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   height: Dim().d52,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: Dim().d12),
                   decoration: BoxDecoration(
                       // color: Clr().white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Clr().grey.withOpacity(0.1),
-                          spreadRadius: 0.5,
-                          blurRadius: 12,
-                          offset: Offset(0, 4), // changes position of shadow
-                        ),
-                      ],
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Clr().grey.withOpacity(0.1),
+                      //     spreadRadius: 0.5,
+                      //     blurRadius: 12,
+                      //     offset: Offset(0, 4), // changes position of shadow
+                      //   ),
+                      // ],
                       borderRadius: BorderRadius.circular(35),
                       border: Border.all(
                         color: Clr().primaryColor,
                       )),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
+                      focusColor: Clr().white,
                       value: cityCat,
                       hint: Text(
                         'Select City',
@@ -208,13 +216,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (t)async {
-                        SharedPreferences sp = await SharedPreferences.getInstance();
+                      onChanged: (t) async {
+                        SharedPreferences sp =
+                            await SharedPreferences.getInstance();
                         int? position;
                         // STM().redirect2page(ctx, Home());
                         setState(() {
                           cityCat = t.toString();
-                          position = cityList.indexWhere((e) => e['name'].toString() == cityCat.toString());
+                          position = cityList.indexWhere((e) =>
+                              e['name'].toString() == cityCat.toString());
                           cityId = cityList[position!]['id'];
                           loading = true;
                           print(cityId);
@@ -386,26 +396,34 @@ class _HomePageState extends State<HomePage> {
                               backgroundColor: Clr().secondaryColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(35))),
-                          child: RichText(
-                            text: TextSpan(
-                              text: "Available:-",
-                              style: Sty().smallText.copyWith(
-                                    fontSize: 12,
-                                    color: Clr().primaryColor,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text:
-                                      ' ${list[index]['available'].toString()}',
+                          child: list[index]['available'] == 'Sold Out'
+                              ? Text(
+                                  '${list[index]['available'].toString()}',
                                   style: Sty().smallText.copyWith(
                                       color: Clr().textColor,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          )),
+                                )
+                              : RichText(
+                                  text: TextSpan(
+                                    text: "Available:-",
+                                    style: Sty().smallText.copyWith(
+                                          fontSize: 12,
+                                          color: Clr().primaryColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                            ' ${list[index]['available'].toString()}',
+                                        style: Sty().smallText.copyWith(
+                                            color: Clr().textColor,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                )),
                     )
                   ],
                 ),
@@ -498,5 +516,4 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
-
 }

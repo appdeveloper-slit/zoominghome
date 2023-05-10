@@ -41,6 +41,7 @@ class _LeadDetails2State extends State<LeadDetails2> {
     STM().checkInternet(context, widget).then((value) {
       if (value) {
         // getCity();
+        refundList();
         print(Token);
       }
     });
@@ -969,7 +970,7 @@ class _LeadDetails2State extends State<LeadDetails2> {
 
 
   String? GenderValue;
-  List<String> BusinessCatList = ['dummy text', 'text dummy'];
+  List<dynamic> BusinessCatList = [];
   plansDialog(ctx) {
     AwesomeDialog(
       context: ctx,
@@ -1017,7 +1018,7 @@ class _LeadDetails2State extends State<LeadDetails2> {
                       borderRadius: BorderRadius.circular(35),
                       border: Border.all(color: Clr().primaryColor,)),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
+                    child: DropdownButton(
                       value: GenderValue,
                       hint:Text('Select an Issue*',style: Sty().mediumText.copyWith(
                         color: Clr().textColor,
@@ -1029,11 +1030,11 @@ class _LeadDetails2State extends State<LeadDetails2> {
                         color: Clr().primaryColor,
                       ),
                       style: TextStyle(color: Color(0xff787882)),
-                      items: BusinessCatList.map((String string) {
-                        return DropdownMenuItem<String>(
-                          value: string,
+                      items: BusinessCatList.map((string) {
+                        return DropdownMenuItem(
+                          value: string['reason'],
                           child: Text(
-                            string,
+                            string['reason'],
                             style:
                             Sty().mediumText.copyWith(
                               color: Clr().textColor,
@@ -1044,7 +1045,7 @@ class _LeadDetails2State extends State<LeadDetails2> {
                       onChanged: (t) {
                         // STM().redirect2page(ctx, Home());
                         setState(() {
-                          GenderValue = t!;
+                          GenderValue = t.toString();
                         });
                       },
                     ),
@@ -1097,10 +1098,20 @@ class _LeadDetails2State extends State<LeadDetails2> {
     var status = result['status'];
     var message = result['message'];
     if(status){
-     leaddetaails == null ? STM().successDialogWithReplace(ctx, message, MyLeads()) : STM().successDialogWithAffinity(ctx, message, HomePage());
+     leaddetaails == null ? STM().successDialogWithReplace(ctx, message, MyLeads(type: 'refund',)) : STM().successDialogWithAffinity(ctx, message, HomePage());
     }else{
       STM().errorDialog(ctx, message);
     }
   }
+
+
+  // refund list
+ void refundList() async {
+    var result = await STM().getWithoutDialog(ctx, 'refund_reason');
+    setState(() {
+      BusinessCatList = result['refund_reason'];
+    });
+ }
+
 
 }

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoominghome/leaddetails2.dart';
 import 'package:zoominghome/manage/static_method.dart';
@@ -36,6 +37,9 @@ class BuyLeadpage extends State<BuyLead> {
     "Buy ONE Lead",
     "Buy ALL Leads",
   ];
+
+  var _razorpay = Razorpay();
+
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
@@ -66,8 +70,25 @@ class BuyLeadpage extends State<BuyLead> {
     print(discountprice);
     v = widget.leaddetails;
     getSession();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
   }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    MakePayment(trans_id: response.paymentId);
+    debugPrint(response.paymentId);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+  }
+
   @override
   Widget build(BuildContext context) {
     ctx = context;
@@ -431,7 +452,45 @@ class BuyLeadpage extends State<BuyLead> {
                           width: Dim().d180,
                           child: ElevatedButton(
                               onPressed: () {
-                                MakePayment();
+                                var totalprice;
+                                if(discount == null){
+                                  var total = totalcount;
+                                  totalprice = total! * 100;
+                                }else{
+                                  var total = int.parse(discount!) * 100;
+                                  totalprice = total;
+                                }
+                                var options = {
+                                  'key': 'rzp_test_fT7N8Y0fzEEHjO',
+                                  'amount': '${totalprice.toString()}',
+                                  //in the smallest currency sub-unit.
+                                  'name': 'ZoomingHome',
+                                  // 'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
+                                  'order': {
+                                    "id": DateTime.now().millisecondsSinceEpoch.toString(),
+                                    "entity": "order",
+                                    "amount": '${totalprice.toString()}',
+                                    "amount_paid": 0,
+                                    "amount_due": '${totalprice.toString()}',
+                                    "currency": "INR",
+                                    "receipt": "Receipt #20",
+                                    "status": "created",
+                                    "attempts": 0,
+                                    "notes": {"key1": "value1", "key2": "value2"},
+                                    "created_at": DateTime.now().toString()
+                                  },
+                                  'description': 'Demo',
+                                  'theme.color': '#FFD401',
+                                  'timeout': 900,
+                                  // in seconds
+                                  // 'prefill': {
+                                  //   'contact': '',
+                                  //   'email': ''
+                                  // }
+                                };
+                                _razorpay.open(options);
+                                print('${totalprice}WEGRHGR');
+                                // MakePayment();
                               },
                               style: ElevatedButton.styleFrom(
                                   elevation: 0.5,
@@ -459,7 +518,7 @@ class BuyLeadpage extends State<BuyLead> {
   }
 
 
-  void MakePayment() async {
+  void MakePayment({trans_id}) async {
     FormData body = FormData.fromMap({
       'lead_id': v['id'],
       'no_of_leads': _selectedIndex == 0 ? 1 : v['available'],
@@ -467,6 +526,7 @@ class BuyLeadpage extends State<BuyLead> {
       'coupon_discount': discountprice ?? 0,
       'total_amount': discount ?? totalcount,
       'paid_amount': discount ?? totalcount,
+      'transaction_id': trans_id,
     });
     var result = await STM().posttoken(ctx, Str().processing, 'buyLead', body, token);
     var status = result['success'];

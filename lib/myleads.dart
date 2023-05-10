@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zoominghome/home.dart';
 import 'package:zoominghome/leaddetails2.dart';
 import 'package:zoominghome/notifications.dart';
 import 'package:zoominghome/sidedrawer.dart';
@@ -16,7 +17,8 @@ import 'values/dimens.dart';
 import 'values/styles.dart';
 
 class MyLeads extends StatefulWidget {
-  const MyLeads({super.key});
+  final String? type;
+  const MyLeads({super.key, this.type});
 
   @override
   State<MyLeads> createState() => _MyLeadsState();
@@ -105,7 +107,7 @@ class _MyLeadsState extends State<MyLeads> {
   Widget build(BuildContext context) {
     ctx = context;
     return WillPopScope(onWillPop: ()async{
-      STM().back2Previous(ctx);
+     widget.type == 'refund'?  STM().finishAffinity(ctx, HomePage()) : STM().back2Previous(ctx);
       return false;
     },
       child: Scaffold(
