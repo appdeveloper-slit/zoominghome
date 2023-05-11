@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   dynamic userdata;
   String walletamount = '0';
 
+
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getDeviceState();
@@ -320,7 +321,7 @@ class _HomePageState extends State<HomePage> {
 // getCity
   void getCity() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    var result = await STM().getWithoutDialog(ctx, 'cityList');
+    var result = await STM().get(ctx,Str().loading,'cityList');
     var status = result['status'];
     if (status) {
       setState(() {
