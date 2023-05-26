@@ -40,7 +40,6 @@ class _LeadDetailsState extends State<LeadDetails> {
         return false;
       },
       child: Scaffold(
-        extendBodyBehindAppBar: true,
         // appBar: AppBar(
         //   backgroundColor: Colors.transparent,
         //   elevation: 0.0,
@@ -54,8 +53,6 @@ class _LeadDetailsState extends State<LeadDetails> {
         //   ),
         //
         // ),
-        key: scaffoldState,
-        drawer: navBar(ctx, scaffoldState),
         // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
         body: SingleChildScrollView(

@@ -560,11 +560,11 @@ class _MyLeadsState extends State<MyLeads> {
                       ? Container()
                       : Row(
                           children: [
-                            SvgPicture.asset('assets/pending.svg',
-                                color: list[index]['refund_status'] ==
-                                        'Not Approved'
-                                    ? Clr().red
-                                    : list[index]['refund_status'] == 'Pending'
+                            list[index]['refund_status'] ==
+                                'Not Approved'
+                                ? Tooltip(child: SvgPicture.asset('assets/info.svg',color: Clr().red,height: Dim().d20),message: list[index]['refund_rejection_reason'].toString(),triggerMode: TooltipTriggerMode.tap,)
+                                : SvgPicture.asset('assets/pending.svg',
+                                color:  list[index]['refund_status'] == 'Pending'
                                         ? Clr().yellow
                                         : Clr().green),
                             SizedBox(

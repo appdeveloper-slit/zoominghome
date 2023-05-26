@@ -13,6 +13,7 @@ import 'manage/static_method.dart';
 import 'mywallet.dart';
 import 'notifications.dart';
 import 'otp.dart';
+import 'signin.dart';
 import 'values/colors.dart';
 import 'values/dimens.dart';
 import 'values/styles.dart';
@@ -303,6 +304,8 @@ class _HomePageState extends State<HomePage> {
     var success = result['success'];
     if (result != null) {
       setState(() {
+        result['account_status'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
+        result['is_deleted'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
         leadList = result['data'];
         loading = false;
         walletamount = result['wallet_balance'];
@@ -313,6 +316,8 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         loading = false;
+        result['account_status'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
+        result['is_deleted'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
       });
       STM().errorDialog(ctx, 'Something went wrong');
     }
@@ -387,7 +392,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(
                       height: Dim().d28,
-                      width: Dim().d110,
                       child: ElevatedButton(
                           onPressed: () {
                             // STM().redirect2page(ctx, OTPVerification());
@@ -398,8 +402,7 @@ class _HomePageState extends State<HomePage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(35))),
                           child: list[index]['available'] == 'Sold Out'
-                              ? Text(
-                                  '${list[index]['available'].toString()}',
+                              ? Text('${list[index]['available'].toString()}',
                                   style: Sty().smallText.copyWith(
                                       color: Clr().textColor,
                                       fontWeight: FontWeight.w700,
@@ -415,12 +418,12 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text:
-                                            ' ${list[index]['available'].toString()}',
+                                        text: ' ${list[index]['available'].toString()}',
                                         style: Sty().smallText.copyWith(
                                             color: Clr().textColor,
                                             fontWeight: FontWeight.w700,
-                                            fontSize: 14),
+                                            fontSize: Dim().d14,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -472,9 +475,30 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                SizedBox(height: Dim().d24),
-                Row(
+                SizedBox(height: Dim().d12),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Budget:-",
+                          style: Sty().smallText.copyWith(
+                            fontSize: 14,
+                            color: Clr().primaryColor,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' ${list[index]['budget']}',
+                              style: Sty().mediumText.copyWith(
+                                  color: Clr().textColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: Dim().d44,
                       child: Card(

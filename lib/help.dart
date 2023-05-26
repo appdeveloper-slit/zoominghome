@@ -34,6 +34,7 @@ class _HelpState extends State<Help> {
       }
     });
   }
+  bool loading = false;
 
   @override
   void initState() {
@@ -119,7 +120,7 @@ class _HelpState extends State<Help> {
                   SizedBox(
                     height: Dim().d2,
                   ),
-                  ListView.builder(
+                  loading ? ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: Dim().d12),
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
@@ -189,6 +190,9 @@ class _HelpState extends State<Help> {
                           }
                       );
                     },
+                  ) : Padding(
+                    padding:  EdgeInsets.all(Dim().d20),
+                    child: CircularProgressIndicator(),
                   ),
                 ],
               ),
@@ -206,6 +210,7 @@ class _HelpState extends State<Help> {
    if(success){
    setState(() {
      helpList = result['data'];
+     loading = true;
    });
    }
  }

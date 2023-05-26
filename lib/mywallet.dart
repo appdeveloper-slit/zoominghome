@@ -101,8 +101,6 @@ class _MyWalletState extends State<MyWallet> {
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        key: scaffoldState,
-        drawer: navBar(ctx, scaffoldState),
         // appBar: AppBar(
         //     toolbarHeight: boolTrue ? kToolbarHeight : 0.0;
         //
@@ -188,7 +186,7 @@ class _MyWalletState extends State<MyWallet> {
                             '+ Add Money',
                             style: Sty().smallText.copyWith(
                                 height: 1.5,
-                                fontSize: 14,
+                                fontSize: Dim().d20,
                                 fontWeight: FontWeight.w300,
                                 color: Clr().primaryColor),
                           ),

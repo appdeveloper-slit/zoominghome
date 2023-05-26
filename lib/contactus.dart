@@ -23,7 +23,6 @@ class _contactusState extends State<contactus> {
   Widget build(BuildContext context) {
     ctx = context;
     return Scaffold(
-      extendBodyBehindAppBar: true,
       // bottomNavigationBar: bottomBarLayout(ctx, 2),
       // appBar: AppBar(
       //   backgroundColor: Colors.transparent,
@@ -38,8 +37,6 @@ class _contactusState extends State<contactus> {
       //   ),
       //
       // ),
-      key: scaffoldState,
-      drawer: navBar(ctx, scaffoldState),
       // resizeToAvoidBottomInset: false,
       backgroundColor: Clr().white,
       body: SingleChildScrollView(

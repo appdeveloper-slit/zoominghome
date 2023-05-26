@@ -8,8 +8,6 @@ import 'package:zoominghome/signin.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // MediaQueryData windowData = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-  // windowData = windowData.copyWith(textScaleFactor: 1.0,);
   SharedPreferences sp = await SharedPreferences.getInstance();
   bool isLogin = sp.getBool('login') ?? false;
   // sp.getBool('is_login') != null ? sp.getBool("is_login")! : false;
@@ -27,7 +25,6 @@ Future<void> main() async {
   runApp(
     MaterialApp(
       navigatorKey: navigatorKey,
-      useInheritedMediaQuery: true,
       debugShowCheckedModeBanner: false,
       home: isLogin ? HomePage() : SingIn(),
     ),);

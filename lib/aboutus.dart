@@ -22,7 +22,6 @@ class _aboutusState extends State<aboutus> {
   Widget build(BuildContext context) {
     ctx = context;
     return Scaffold(
-      extendBodyBehindAppBar: true,
       // bottomNavigationBar: bottomBarLayout(ctx, 2),
       // appBar: AppBar(
       //   backgroundColor: Colors.transparent,
@@ -37,8 +36,6 @@ class _aboutusState extends State<aboutus> {
       //   ),
       //
       // ),
-      key: scaffoldState,
-      drawer: navBar(ctx, scaffoldState),
       // resizeToAvoidBottomInset: false,
       backgroundColor: Clr().white,
       body: SingleChildScrollView(

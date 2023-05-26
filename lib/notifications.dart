@@ -52,8 +52,6 @@ class _NotificationPageState extends State<NotificationPage> {
     },
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        key: scaffoldState,
-        drawer: navBar(ctx,scaffoldState),
         // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
         body: SingleChildScrollView(
@@ -98,7 +96,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       style: Sty().largeText.copyWith(
                           color: Clr().primaryColor,
                           fontWeight: FontWeight.w500,
-                          fontSize: 24),
+                          fontSize: Dim().d24),
                     ),
                   ) ,
                   SizedBox(
@@ -127,21 +125,21 @@ class _NotificationPageState extends State<NotificationPage> {
                                 style: Sty().largeText.copyWith(
                                     color: Clr().primaryColor,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16),
+                                    fontSize: Dim().d16),
                               ),
-                              const SizedBox(
-                                height: 8,
+                               SizedBox(
+                                height: Dim().d8,
                               ),
                                Text(
                                 '${notificationList[index]['discription']}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   height: 1.5,
                                   color: Color(0xff747688),
-                                  fontSize: 14,
+                                  fontSize: Dim().d14,
                                 ),
                               ),
-                              const SizedBox(
-                                height: 4,
+                               SizedBox(
+                                height: Dim().d4,
                               ),
                                Align(
                                   alignment: Alignment.centerRight,
@@ -149,10 +147,10 @@ class _NotificationPageState extends State<NotificationPage> {
                                     '${notificationList[index]['created_on']}',
                                     style: TextStyle(
                                       color: Color(0xff28282A),
-                                      fontSize: 12,
+                                      fontSize: Dim().d12,
                                     ),
                                   )),
-                              Divider(),
+                              const Divider(),
                             ],
                           ),
                         ),
