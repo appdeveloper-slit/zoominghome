@@ -422,7 +422,6 @@ class _SignUpState extends State<SignUp> {
                                 ),
                             counterText: "",
                           ),
-                          maxLength: 30,
                         ),
                         SizedBox(
                           height: Dim().d28,

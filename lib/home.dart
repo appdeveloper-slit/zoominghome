@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
   dynamic userdata;
   String walletamount = '0';
 
-
   getSession() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getDeviceState();
@@ -304,8 +303,12 @@ class _HomePageState extends State<HomePage> {
     var success = result['success'];
     if (result != null) {
       setState(() {
-        result['account_status'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
-        result['is_deleted'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
+        result['account_status'] == true
+            ? STM().finishAffinity(ctx, SingIn())
+            : null;
+        result['is_deleted'] == true
+            ? STM().finishAffinity(ctx, SingIn())
+            : null;
         leadList = result['data'];
         loading = false;
         walletamount = result['wallet_balance'];
@@ -316,8 +319,12 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         loading = false;
-        result['account_status'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
-        result['is_deleted'] == true ? STM().finishAffinity(ctx, SingIn()) : null ;
+        result['account_status'] == true
+            ? STM().finishAffinity(ctx, SingIn())
+            : null;
+        result['is_deleted'] == true
+            ? STM().finishAffinity(ctx, SingIn())
+            : null;
       });
       STM().errorDialog(ctx, 'Something went wrong');
     }
@@ -326,7 +333,7 @@ class _HomePageState extends State<HomePage> {
 // getCity
   void getCity() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    var result = await STM().get(ctx,Str().loading,'cityList');
+    var result = await STM().get(ctx, Str().loading, 'cityList');
     var status = result['status'];
     if (status) {
       setState(() {
@@ -390,8 +397,8 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: Dim().d28,
+                    SizedBox(width: Dim().d8),
+                    Expanded(
                       child: ElevatedButton(
                           onPressed: () {
                             // STM().redirect2page(ctx, OTPVerification());
@@ -402,7 +409,8 @@ class _HomePageState extends State<HomePage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(35))),
                           child: list[index]['available'] == 'Sold Out'
-                              ? Text('${list[index]['available'].toString()}',
+                              ? Text(
+                                  '${list[index]['available'].toString()}',
                                   style: Sty().smallText.copyWith(
                                       color: Clr().textColor,
                                       fontWeight: FontWeight.w700,
@@ -418,12 +426,13 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: ' ${list[index]['available'].toString()}',
+                                        text:
+                                            ' ${list[index]['available'].toString()}',
                                         style: Sty().smallText.copyWith(
-                                            color: Clr().textColor,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: Dim().d14,
-                                        ),
+                                              color: Clr().textColor,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: Dim().d14,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -435,6 +444,7 @@ class _HomePageState extends State<HomePage> {
                   height: Dim().d8,
                 ),
                 RichText(
+                  maxLines: 2,
                   text: TextSpan(
                     text: "Name:-",
                     style: Sty().smallText.copyWith(
@@ -446,9 +456,11 @@ class _HomePageState extends State<HomePage> {
                       TextSpan(
                         text: ' ${list[index]['name'].toString()}',
                         style: Sty().smallText.copyWith(
-                            color: Clr().textColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
+                              color: Clr().textColor,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 15,
+                            ),
                       ),
                     ],
                   ),
@@ -457,6 +469,7 @@ class _HomePageState extends State<HomePage> {
                   height: Dim().d16,
                 ),
                 RichText(
+                  maxLines: 2,
                   text: TextSpan(
                     text: "Location:-",
                     style: Sty().smallText.copyWith(
@@ -469,6 +482,7 @@ class _HomePageState extends State<HomePage> {
                         text: ' ${list[index]['city']['name']}',
                         style: Sty().mediumText.copyWith(
                             color: Clr().textColor,
+                            overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.w500,
                             fontSize: 15),
                       ),
@@ -476,17 +490,20 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: Dim().d12),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: RichText(
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         text: TextSpan(
                           text: "Budget:-",
                           style: Sty().smallText.copyWith(
-                            fontSize: 14,
-                            color: Clr().primaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
+                                fontSize: 14,
+                                color: Clr().primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' ${list[index]['budget']}',
@@ -499,36 +516,35 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: Dim().d44,
+                    Expanded(
                       child: Card(
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(35),
                             side: BorderSide(width: 0.6, color: Colors.grey)),
-                        child: Center(
-                          child: Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: Dim().d12),
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Lead Cost:-",
-                                style: Sty().smallText.copyWith(
-                                      fontSize: 14,
-                                      color: Clr().primaryColor,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text:
-                                        ' ₹ ${list[index]['lead_cost'].toString()}',
-                                    style: Sty().smallText.copyWith(
-                                        color: Clr().textColor,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dim().d8, vertical: Dim().d12),
+                          child: RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            text: TextSpan(
+                              text: "Lead Cost:-",
+                              style: Sty().smallText.copyWith(
+                                    fontSize: 14,
+                                    color: Clr().primaryColor,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ],
-                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      ' ₹ ${list[index]['lead_cost'].toString()}',
+                                  style: Sty().smallText.copyWith(
+                                      color: Clr().textColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15),
+                                ),
+                              ],
                             ),
                           ),
                         ),

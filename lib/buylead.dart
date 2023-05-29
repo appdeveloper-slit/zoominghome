@@ -383,7 +383,7 @@ class BuyLeadpage extends State<BuyLead> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: ' ₹ ${discount == null ? 0: discount}',
+                              text: ' ${discountprice == null ? 0: discountprice}%',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,

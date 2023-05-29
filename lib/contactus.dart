@@ -108,6 +108,24 @@ class _contactusState extends State<contactus> {
                     ],
                   ),
                 ),
+                SizedBox(height: Dim().d20),
+                InkWell(
+                  onTap: ()async{
+                    await launch("whatsapp://send?phone=9321033767");
+                  },
+                  child: Column(
+                    children: [
+                      const Icon(Icons.call),
+                      SizedBox(height: Dim().d8),
+                      Text(
+                        '+91 9321033767',
+                          style: Sty().mediumText.copyWith(
+                              fontWeight: FontWeight.w500
+                          ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
