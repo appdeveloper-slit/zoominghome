@@ -115,7 +115,7 @@ class _contactusState extends State<contactus> {
                   },
                   child: Column(
                     children: [
-                      const Icon(Icons.call),
+                       SvgPicture.asset('assets/whatsapp.svg'),
                       SizedBox(height: Dim().d8),
                       Text(
                         '+91 9321033767',

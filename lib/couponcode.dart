@@ -193,7 +193,7 @@ class _CouponCodeState extends State<CouponCode> {
   }
 
   // coupanList
-void getCoupanList() async {
+void getCoupanList({code,duscountprice}) async {
     var result = await STM().get(ctx, Str().loading, 'coupon_list');
     var status = result['status'];
     if(status){
@@ -214,8 +214,9 @@ void applyCoupans({code,duscountprice}) async {
         BuyLeadpage.controller.sink.add({
           'codename': code,
           'discount': result['data'],
-          'discount_price': duscountprice,
+          'discount_price': int.parse(widget.amount.toString()) - int.parse(result['data'].toString()),
         });
+        print(duscountprice);
         STM().back2Previous(ctx);
     }
 }

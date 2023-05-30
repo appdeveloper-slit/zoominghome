@@ -23,7 +23,7 @@ class BuyLead extends StatefulWidget {
     return BuyLeadpage();
   }
 }
-
+String? discountprice;
 class BuyLeadpage extends State<BuyLead> {
   late BuildContext ctx;
   TextEditingController mobileCtrl = TextEditingController();
@@ -31,8 +31,8 @@ class BuyLeadpage extends State<BuyLead> {
   static StreamController<dynamic> controller = StreamController<dynamic>.broadcast();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
-  String? discount,discountprice;
-  int? totalcount;
+  String? discount;
+  int? totalcount,copandiscount;
   final List<String> _wordName = [
     "Buy ONE Lead",
     "Buy ALL Leads",
@@ -63,11 +63,11 @@ class BuyLeadpage extends State<BuyLead> {
           setState(() {
             discount = event['discount'].toString();
             mobileCtrl = TextEditingController(text: event['codename'].toString());
-            discountprice = event['discount_price'].toString();
+            copandiscount = event['discount_price'];
           });
+          print(discountprice);
       },
     );
-    print(discountprice);
     v = widget.leaddetails;
     getSession();
     super.initState();
@@ -361,7 +361,7 @@ class BuyLeadpage extends State<BuyLead> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '₹ ${v['lead_cost'].toString()}',
+                              text: ' ₹ ${v['lead_cost'].toString()}',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,
@@ -383,7 +383,7 @@ class BuyLeadpage extends State<BuyLead> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: ' ${discountprice == null ? 0: discountprice}%',
+                              text: ' ₹ ${copandiscount}',
                               style: Sty().smallText.copyWith(
                                   color: Clr().textColor,
                                   fontWeight: FontWeight.w500,
@@ -516,6 +516,7 @@ class BuyLeadpage extends State<BuyLead> {
       setState(() {
         discount = result['data'].toString();
         discountprice = list[index]['coupon_flat_discount'].toString();
+        copandiscount = int.parse(v['lead_cost'].toString()) - int.parse(discount.toString());
         print(discount);
         print(discountprice);
       });
@@ -535,11 +536,13 @@ class BuyLeadpage extends State<BuyLead> {
         mobileCtrl.clear();
         discount = null;
         totalcount = leadcost * available;
+        copandiscount = 0;
       });
     }else{
       mobileCtrl.clear();
       discount = null;
       totalcount = leadcost;
+      copandiscount = 0;
     }
   }
 
