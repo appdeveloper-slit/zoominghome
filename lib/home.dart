@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:zoominghome/sidedrawer.dart';
 import 'package:zoominghome/values/strings.dart';
 import 'bottom_navigation/bottom_navigation.dart';
@@ -146,144 +147,147 @@ class _HomePageState extends State<HomePage> {
         drawer: navBar(ctx, scaffoldState),
         // resizeToAvoidBottomInset: false,
         backgroundColor: Clr().white,
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/pattern.png'),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter)),
-          child: Padding(
-            padding: EdgeInsets.all(Dim().d16),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: Dim().d80,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Hi, ${userdata}',
-                    style: Sty().largeText.copyWith(
-                        color: Clr().primaryColor,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 24),
+        body: UpgradeAlert(
+          upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.material),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/pattern.png'),
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter)),
+            child: Padding(
+              padding: EdgeInsets.all(Dim().d16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Dim().d80,
                   ),
-                ),
-                SizedBox(
-                  height: Dim().d100,
-                ),
-                Container(
-                  height: Dim().d52,
-                  padding: EdgeInsets.symmetric(horizontal: Dim().d12),
-                  decoration: BoxDecoration(
-                      // color: Clr().white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Clr().grey.withOpacity(0.1),
-                      //     spreadRadius: 0.5,
-                      //     blurRadius: 12,
-                      //     offset: Offset(0, 4), // changes position of shadow
-                      //   ),
-                      // ],
-                      borderRadius: BorderRadius.circular(35),
-                      border: Border.all(
-                        color: Clr().primaryColor,
-                      )),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      focusColor: Clr().white,
-                      value: cityCat,
-                      hint: Text(
-                        'Select City',
-                        style: Sty().mediumText.copyWith(
-                              color: Clr().textColor,
-                            ),
-                      ),
-                      isExpanded: true,
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 28,
-                        color: Clr().primaryColor,
-                      ),
-                      style: const TextStyle(color: Color(0xff787882)),
-                      items: cityList.map((string) {
-                        return DropdownMenuItem(
-                          value: string['name'],
-                          child: Text(
-                            string['name'],
-                            style: Sty().mediumText.copyWith(
-                                  color: Clr().textColor,
-                                ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (t) async {
-                        SharedPreferences sp =
-                            await SharedPreferences.getInstance();
-                        int? position;
-                        // STM().redirect2page(ctx, Home());
-                        setState(() {
-                          cityCat = t.toString();
-                          position = cityList.indexWhere((e) =>
-                              e['name'].toString() == cityCat.toString());
-                          cityId = cityList[position!]['id'];
-                          loading = true;
-                          print(cityId);
-                          sp.setInt('cityId', cityId!);
-                        });
-                        GetHomeApi(cityId);
-                      },
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Hi, ${userdata}',
+                      style: Sty().largeText.copyWith(
+                          color: Clr().primaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 24),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: Dim().d16,
-                ),
-                loading == true
-                    ? Expanded(
-                        child: SizedBox(
-                            height: MediaQuery.of(ctx).size.height / 1.3,
-                            child: Center(
-                                child: Text(
-                              'Loading Leads...',
-                              style: Sty().mediumBoldText,
-                            ))),
-                      )
-                    : leadList.isEmpty
-                        ? Expanded(
-                            child: SizedBox(
-                                height: MediaQuery.of(ctx).size.height / 1.3,
-                                child: Center(
-                                    child: Text(
-                                  cityCat == null ? 'Select City' : 'No Leads',
-                                  style: Sty().mediumBoldText,
-                                ))),
-                          )
-                        : Expanded(
-                            child: MediaQuery.removePadding(
-                              context: context,
-                              removeTop: true,
-                              child: RawScrollbar(
-                                thumbColor: Clr().secondaryColor,
-                                radius: Radius.circular(16),
-                                thickness: 5,
-                                child: ListView.builder(
-                                  padding: EdgeInsets.only(
-                                      top: Dim().d8,
-                                      right: Dim().d8,
-                                      left: Dim().d8,
-                                      bottom: Dim().d8),
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: leadList.length,
-                                  itemBuilder: (context, index) {
-                                    return cardLayout(context, index, leadList);
-                                  },
+                  SizedBox(
+                    height: Dim().d100,
+                  ),
+                  Container(
+                    height: Dim().d52,
+                    padding: EdgeInsets.symmetric(horizontal: Dim().d12),
+                    decoration: BoxDecoration(
+                        // color: Clr().white,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Clr().grey.withOpacity(0.1),
+                        //     spreadRadius: 0.5,
+                        //     blurRadius: 12,
+                        //     offset: Offset(0, 4), // changes position of shadow
+                        //   ),
+                        // ],
+                        borderRadius: BorderRadius.circular(35),
+                        border: Border.all(
+                          color: Clr().primaryColor,
+                        )),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        focusColor: Clr().white,
+                        value: cityCat,
+                        hint: Text(
+                          'Select City',
+                          style: Sty().mediumText.copyWith(
+                                color: Clr().textColor,
+                              ),
+                        ),
+                        isExpanded: true,
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 28,
+                          color: Clr().primaryColor,
+                        ),
+                        style: const TextStyle(color: Color(0xff787882)),
+                        items: cityList.map((string) {
+                          return DropdownMenuItem(
+                            value: string['name'],
+                            child: Text(
+                              string['name'],
+                              style: Sty().mediumText.copyWith(
+                                    color: Clr().textColor,
+                                  ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (t) async {
+                          SharedPreferences sp =
+                              await SharedPreferences.getInstance();
+                          int? position;
+                          // STM().redirect2page(ctx, Home());
+                          setState(() {
+                            cityCat = t.toString();
+                            position = cityList.indexWhere((e) =>
+                                e['name'].toString() == cityCat.toString());
+                            cityId = cityList[position!]['id'];
+                            loading = true;
+                            print(cityId);
+                            sp.setInt('cityId', cityId!);
+                          });
+                          GetHomeApi(cityId);
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dim().d16,
+                  ),
+                  loading == true
+                      ? Expanded(
+                          child: SizedBox(
+                              height: MediaQuery.of(ctx).size.height / 1.3,
+                              child: Center(
+                                  child: Text(
+                                'Loading Leads...',
+                                style: Sty().mediumBoldText,
+                              ))),
+                        )
+                      : leadList.isEmpty
+                          ? Expanded(
+                              child: SizedBox(
+                                  height: MediaQuery.of(ctx).size.height / 1.3,
+                                  child: Center(
+                                      child: Text(
+                                    cityCat == null ? 'Select City' : 'No Leads',
+                                    style: Sty().mediumBoldText,
+                                  ))),
+                            )
+                          : Expanded(
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                child: RawScrollbar(
+                                  thumbColor: Clr().secondaryColor,
+                                  radius: Radius.circular(16),
+                                  thickness: 5,
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.only(
+                                        top: Dim().d8,
+                                        right: Dim().d8,
+                                        left: Dim().d8,
+                                        bottom: Dim().d8),
+                                    shrinkWrap: true,
+                                    physics: BouncingScrollPhysics(),
+                                    itemCount: leadList.length,
+                                    itemBuilder: (context, index) {
+                                      return cardLayout(context, index, leadList);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

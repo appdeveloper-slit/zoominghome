@@ -129,72 +129,77 @@ class _MyProfileState extends State<MyProfile> {
                                                   fontWeight: FontWeight.w100,
                                                 )),
                                         SizedBox(width: Dim().d14),
-                                        SizedBox(
-                                            width: Dim().d220,
-                                            height: Dim().d44,
-                                            child: DropdownButtonFormField(
-                                              value: businessCat,
-                                              hint: Text(
-                                                'Select Business Category',
-                                                style: Sty().smallText.copyWith(
-                                                      color: Clr().textColor,
-                                                    ),
-                                              ),
-                                              isExpanded: true,
-                                              decoration: Sty()
-                                                  .TextFormFieldOutlineDarkStyleWithProfile
-                                                  .copyWith(
-                                                    fillColor: Clr().white,
-                                                    filled: true,
-                                                  ),
-                                              icon: Icon(
-                                                Icons.keyboard_arrow_down,
-                                                size: 20,
-                                                color: Clr().primaryColor,
-                                              ),
-                                              style: TextStyle(
-                                                  color: Color(0xff787882)),
-                                              items:
-                                                  BusinessCatList.map((string) {
-                                                return DropdownMenuItem(
-                                                  value: string['name'],
-                                                  child: Text(
-                                                    string['name'],
-                                                    style: Sty()
-                                                        .mediumText
-                                                        .copyWith(
-                                                          color:
-                                                              Clr().textColor,
-                                                        ),
-                                                  ),
-                                                );
-                                              }).toList(),
-                                              onChanged: (t) {
-                                                setState(() {
-                                                  businessCat = t.toString();
-                                                  int position = BusinessCatList
-                                                      .indexWhere((e) =>
-                                                          e['name']
-                                                              .toString() ==
-                                                          businessCat
-                                                              .toString());
-                                                  businessId =
-                                                      BusinessCatList[position]
-                                                          ['id'];
-                                                });
-                                              },
-                                            )
-                                            // TextField(
-                                            //   controller: catCtrl,
-                                            //   keyboardType: TextInputType.text,
-                                            //   decoration: Sty()
-                                            //       .TextFormFieldOutlineDarkStyleWithProfile
-                                            //       .copyWith(
-                                            //         fillColor: Clr().white,
-                                            //         filled: true,
-                                            //       ),
-                                            // ),
-                                            ),
+                                        Text('${businessCat}',
+                                          style: Sty().mediumText.copyWith(
+                                            color: Clr().black,
+                                          ),
+                                        ),
+                                        // SizedBox(
+                                        //     width: Dim().d220,
+                                        //     height: Dim().d44,
+                                        //     child: DropdownButtonFormField(
+                                        //       value: businessCat,
+                                        //       hint: Text(
+                                        //         'Select Business Category',
+                                        //         style: Sty().smallText.copyWith(
+                                        //               color: Clr().textColor,
+                                        //             ),
+                                        //       ),
+                                        //       isExpanded: true,
+                                        //       decoration: Sty()
+                                        //           .TextFormFieldOutlineDarkStyleWithProfile
+                                        //           .copyWith(
+                                        //             fillColor: Clr().white,
+                                        //             filled: true,
+                                        //           ),
+                                        //       icon: Icon(
+                                        //         Icons.keyboard_arrow_down,
+                                        //         size: 20,
+                                        //         color: Clr().primaryColor,
+                                        //       ),
+                                        //       style: TextStyle(
+                                        //           color: Color(0xff787882)),
+                                        //       items:
+                                        //           BusinessCatList.map((string) {
+                                        //         return DropdownMenuItem(
+                                        //           value: string['name'],
+                                        //           child: Text(
+                                        //             string['name'],
+                                        //             style: Sty()
+                                        //                 .mediumText
+                                        //                 .copyWith(
+                                        //                   color:
+                                        //                       Clr().textColor,
+                                        //                 ),
+                                        //           ),
+                                        //         );
+                                        //       }).toList(),
+                                        //       onChanged: (t) {
+                                        //         setState(() {
+                                        //           businessCat = t.toString();
+                                        //           int position = BusinessCatList
+                                        //               .indexWhere((e) =>
+                                        //                   e['name']
+                                        //                       .toString() ==
+                                        //                   businessCat
+                                        //                       .toString());
+                                        //           businessId =
+                                        //               BusinessCatList[position]
+                                        //                   ['id'];
+                                        //         });
+                                        //       },
+                                        //     )
+                                        //     // TextField(
+                                        //     //   controller: catCtrl,
+                                        //     //   keyboardType: TextInputType.text,
+                                        //     //   decoration: Sty()
+                                        //     //       .TextFormFieldOutlineDarkStyleWithProfile
+                                        //     //       .copyWith(
+                                        //     //         fillColor: Clr().white,
+                                        //     //         filled: true,
+                                        //     //       ),
+                                        //     // ),
+                                        //     ),
                                       ]),
                                     ),
                                     SizedBox(
